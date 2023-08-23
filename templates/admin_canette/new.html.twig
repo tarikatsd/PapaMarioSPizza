@@ -1,0 +1,11 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Nouvelle Canette{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_admin_canette_index') }}" class="btn btn-orange btn-sm mb-2">Retour a la liste</a>
+    <h1>Nouvelle Canette</h1>
+
+    {{ include('admin_canette/_form.html.twig') }}
+
+{% endblock %}

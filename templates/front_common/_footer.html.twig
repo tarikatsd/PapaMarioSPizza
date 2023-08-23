@@ -1,0 +1,20 @@
+<footer class="footer bg-brown color-yellow p-3 d-flex justify-content-between">
+    <div>
+        &copy;{{ "" | date('Y') }}
+    </div>
+    
+    <div>
+        <a href="#" class=" color-yellow">Accueil</a>
+        <a href="#" class="mx-1 color-yellow">Contact</a>
+        <a href="#" class=" color-yellow">À propos</a>
+    </div>
+    
+    <div>
+        Suivez-nous sur :
+        {% for reseauSocial in reseauSocials -%}
+        <a href="{{ reseauSocial.url }}" class="mx-& color-yellow text-decoration-none">
+            <img src="{{ asset('images/reseauSocial/' ~ reseauSocial.imageName) }}" alt="{{ reseauSocial.nom }}" width="30" height="30">
+        </a>
+        {%- endfor %}
+    </div>
+</footer>

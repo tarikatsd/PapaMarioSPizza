@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Nos Pizza
+{% endblock %}
+
+
+{% block body %}
+    <h1 class="text-center mt-4 ">
+        Nos Pizzas
+    </h1>
+    <div class="container mt-4">
+        <div class="row">
+            {% for pizza in pizzas %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card h-100 shadow">
+                        <img src="{{ asset('images/pizza/' ~ pizza.imageName) }}" class="card-img-top" alt="{{ pizza.nom }}">
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="card-title">
+                                        {{ pizza.nom }}
+                                    </h5>
+                                    <p class="card-text">
+                                        {{ pizza.prix }}
+                                        €
+                                                                            
+                                    </p>
+                                </div>
+                                {% for ingredient in pizza.ingredient %}
+                                    {{ ingredient.nom }}
+                                    /
+                                                                    
+                                {% endfor %}
+                                <div class="mt-auto d-flex justify-content-between">
+                                    <button type="button" class="btn btn-warning btn-modal-pizza" data-pizza-id="{{ pizza.id }}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        <i class="fas fa-shopping-cart "></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!------------------------ Modal ---------------------------->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                            Modifier la pizza
+                        </h1>
+                        <button type="button" class="btn-close btn-warning btn-close-modal-pizza" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <div class="text-center">
+                    <div class="spinner-border text-warning" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                    </div>
+                    </div>
+                    {# {% include 'front_pizza/_form.html.twig' %} #}
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!------------------------ Modal ---------------------------->
+    {% endblock %}
+{% block javascripts %}
+<script>
+    $(".btn-modal-pizza").on("click", function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        let pizzaId = $(this).data("pizza-id");
+
+        $.ajax({
+            url : "/pizza/getform",
+            type: "POST",
+            data: {
+                pizzaId: pizzaId
+            },
+        }).done(function(response){
+            $("#exampleModal .modal-body").html(response);
+            $('.select2').select2({
+                dropdownParent: $('#exampleModal'),
+        });
+            });
+        });
+    $('.btn-close-modal-promo').on('click', function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        $("#exampleModal .modal-body").html('<div class="text-center"><div class="spinner-border text-warning" role="status"><span class="visually-hidden">Loading...</span></div></div>');
+    });
+</script>
+{% endblock %}
+    

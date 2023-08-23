@@ -1,0 +1,133 @@
+<nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+        <a class="sidebar-brand" href="index.html">
+            <span class="align-middle">
+                Administrateur
+            </span>
+        </a>
+        <ul class="sidebar-nav">
+        <li class="sidebar-item {{visiteActive}}">
+        <a class="sidebar-link" href={{path("app_home")}}>
+    <i class="align-middle" data-feather="log-out"></i>
+    <span class="align-middle">
+    visite du site
+</span>
+</a>
+</li>
+            <li class="sidebar-header">
+                Produits
+            </li>
+            <li class="sidebar-item {{promoActive}}">
+                <a class="sidebar-link" href={{path("app_admin_promo_index")}}>
+                    <i class="align-middle" data-feather="gift"></i>
+                    <span class="align-middle">
+                        Promos
+                    </span>
+                </a>
+            </li>
+            <li class="sidebar-item {{pizzaActive}}">
+                <a class="sidebar-link" href={{path("app_admin_pizza_index")}}>
+                    <i class="align-middle" data-feather="pie-chart"></i>
+                    <span class="align-middle">
+                        Pizzas
+                    </span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ingredientActive}}">
+                <a class="sidebar-link" href={{path("app_admin_ingredient_index")}}>
+                    <i class="align-middle" data-feather="plus-circle"></i>
+                    <span class="align-middle">
+                        Ingredients
+                    </span>
+                </a>
+            </li>
+			<li class="sidebar-item {{extraActive}}">
+			<a class="sidebar-link" href={{path("app_admin_extra_index")}}>
+				<i class="align-middle" data-feather="book"></i>
+				<span class="align-middle">
+					Extras
+				</span>
+			</a>
+		</li>
+		<li class="sidebar-item {{dessertActive}}">
+		<a class="sidebar-link" href={{path("app_admin_dessert_index")}}>
+			<i class="align-middle" data-feather="grid"></i>
+			<span class="align-middle">
+				Desserts
+			</span>
+		</a>
+	</li>
+	<li class="sidebar-item {{boissonActive}}">
+	<a class="sidebar-link" href={{path("app_admin_boisson_index")}}>
+		<i class="align-middle" data-feather="thermometer"></i>
+		<span class="align-middle">
+			Bouteilles
+		</span>
+	</a>
+    <li class="sidebar-item {{canetteActive}}">
+	<a class="sidebar-link" href={{path("app_admin_canette_index")}}>
+		<i class="align-middle" data-feather="coffee"></i>
+		<span class="align-middle">
+			Canettes
+            
+		</span>
+	</a>
+    <li class="sidebar-header">
+        Paramètres du site
+    </li>
+    <li class="sidebar-item {{carouselActive}}">
+                <a class="sidebar-link" href={{path("app_admin_carousel_index")}}>
+                    <i class="align-middle" data-feather="image"></i>
+                    <span class="align-middle">
+                        Carousels
+                    </span>
+                </a>
+            </li>
+</li>
+<li class="sidebar-item {{homeActive}}">
+<a class="sidebar-link" href={{path("app_admin_home_index")}}>
+    <i class="align-middle" data-feather="home"></i>
+    <span class="align-middle">
+        Homes
+    </span>
+</a>
+<li class="sidebar-header">
+    Communication
+</li>
+</li>
+<li class="sidebar-item {{userActive}}">
+<a class="sidebar-link" href="#">
+    <i class="align-middle" data-feather="user"></i>
+    <span class="align-middle">
+        Utilisateurs
+    </span>
+</a>
+</li>
+<li class="sidebar-item {{resauSocialActive}}">
+<a class="sidebar-link" href={{path("app_admin_reseau_social_index")}}>
+    <i class="align-middle" data-feather="facebook"></i>
+    <span class="align-middle">
+        Reseaux sociaux
+    </span>
+</a>
+</li>
+<li class="sidebar-item {{contactActive}}">
+<a class="sidebar-link" href="#">
+    <i class="align-middle" data-feather="mail"></i>
+    <span class="align-middle">
+        Contact
+    </span>
+</a>
+</li>
+<li class="sidebar-item {{CGVActive}}">
+<a class="sidebar-link" href={{path("app_admin_cgv_index")}}>
+    <i class="align-middle" data-feather="info"></i>
+    <span class="align-middle">
+        Conditions générales
+    </span>
+</a>
+</li>
+
+</ul>
+</div>
+</nav>

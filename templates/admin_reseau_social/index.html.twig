@@ -1,0 +1,44 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Reseau sociaux{% endblock %}
+
+{% block body %}
+        <div class="d-flex justify-content-between align-items-center">
+    <h1>Reseau sociaux</h1>
+            <a href="{{ path('app_admin_reseau_social_new') }}" class="btn btn-brown">
+                Nouveau
+            </a>
+        </div>
+        <table class="table table-index table-striped table-responsive">
+            <thead>
+                <tr>
+                <th>Image</th>
+                <th>Nom</th>
+                <th>Url</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reseau_social in reseau_socials %}
+            <tr>
+            <td><a href="{{ asset('images/reseauSocial/' ~ reseau_social.imageName) }}" data-lightbox="{{ reseau_social.imageName }}">
+            <img src="{{ asset('images/reseauSocial/' ~ reseau_social.imageName) }}" alt="{{ reseau_social.imageName }}" class="img-list"></a></td>
+                <td>{{ reseau_social.nom }}</td>
+                <td>{{ reseau_social.url }}</td>
+                    <td>
+                        <a href="{{ path('app_admin_reseau_social_show', {'id': reseau_social.id}) }}" class="btn btn-orange">
+                            <i class="align-middle" data-feather="eye"></i>
+                        </a>
+                        <a href="{{ path('app_admin_reseau_social_edit', {'id': reseau_social.id}) }}" class="btn btn-brown">
+                            <i class="align-middle" data-feather="edit-2"></i>
+                        </a>
+                    </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-start">Aucun reseau social trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

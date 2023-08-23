@@ -1,0 +1,54 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}
+    Extras
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>
+            Extras
+        </h1>
+        <a href="{{ path('app_admin_extra_new') }}" class="btn btn-brown">
+            Nouveau
+        </a>
+    </div>
+    <table class="table table-index table-striped table-responsive">
+        <thead>
+            <tr>
+            <th>Image</th>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Activée</th>
+            <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for extra in extras %}
+            <tr>
+                <td>
+                <a href="{{ asset('images/extra/' ~ extra.imageName) }}" data-lightbox="{{ extra.imageName }}"{% if extra.nom is not null%} data-title="{{extra.nom}}"{% endif %} >
+                        <img src="{{ asset('images/extra/' ~ extra.imageName) }}" alt="{{ extra.imageName }}" class="img-list"></a>
+                </td>
+            <td>{{ extra.nom }}</td>
+            <td>{{ extra.prix }}</td>
+            <td>{{ extra.isActive ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <a href="{{ path('app_admin_extra_show', {'id': extra.id}) }}" class="btn btn-orange">
+                <i class="align-middle" data-feather="eye"></i>
+                </a>
+                <a href="{{ path('app_admin_extra_edit', {'id': extra.id}) }}" class="btn btn-brown">
+                <i class="align-middle" data-feather="edit-2"></i>
+                    </a>
+                    </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-start">Aucun extra trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}
+Canettes
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>
+            Canettes 
+        </h1>
+        <a href="{{ path('app_admin_canette_new') }}" class="btn btn-brown">
+            Nouveau
+        </a>
+    </div>
+    <table class="table table-index table-striped table-responsive">
+        <thead>
+            <tr>
+            <th>Image</th>
+            <th>Nom</th>
+            <th>Taille</th>
+            <th>Prix</th>
+            <th>Activée</th>
+            <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for canette in canettes %}
+            <tr>
+                <td>
+                <a href="{{ asset('images/canette/' ~ canette.imageName) }}" data-lightbox="{{ canette.imageName }}"{% if canette.nom is not null%} data-title="{{canette.nom}}"{% endif %} >
+                        <img src="{{ asset('images/canette/' ~ canette.imageName) }}" alt="{{ canette.imageName }}" class="img-list"></a>
+                    </td>
+            <td>{{ canette.nom }}</td>
+            <td>{{ canette.taille }}</td>
+            <td>{{ canette.prix }}</td>
+            <td>{{ canette.IsActive ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <a href="{{ path('app_admin_canette_show', {'id': canette.id}) }}" class="btn btn-orange">
+                <i class="align-middle" data-feather="eye"></i>
+                </a>
+                <a href="{{ path('app_admin_canette_edit', {'id': canette.id}) }}" class="btn btn-brown">
+                <i class="align-middle" data-feather="edit-2"></i>
+                </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6"class="text-start">Aucun donnee trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

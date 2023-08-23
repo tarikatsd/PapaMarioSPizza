@@ -1,0 +1,11 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Nouvel Extra{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_admin_extra_index') }}" class="btn btn-orange btn-sm mb-2">Retour a la liste</a>
+    <h1>Nouvel Extra</h1>
+
+    {{ include('admin_extra/_form.html.twig') }}
+
+{% endblock %}

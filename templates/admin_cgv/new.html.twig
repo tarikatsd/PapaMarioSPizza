@@ -1,0 +1,11 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Nouvelle Condition Générale de Vente{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_admin_cgv_index') }}" class="btn btn-orange btn-sm mb-2">Retour a la liste</a>
+    <h1>Nouvelle Condition Générale de Vente</h1>
+
+    {{ include('admin_cgv/_form.html.twig') }}
+
+{% endblock %}

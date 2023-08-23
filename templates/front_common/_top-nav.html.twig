@@ -1,0 +1,106 @@
+<nav class="navbar navbar-expand-lg bg-brown">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ path('app_home2') }}">
+            <img src="{{ asset('images/logo.png') }}" alt="logo" width="80" height="80" class="d-inline-block align-text-top rounded-circle"></a>
+            <div>
+                <h1 class="navbar-text text-center color-yellow">
+                    Pizza Mario'S Pizza 
+                                                        
+                                    
+                </h1>
+                <div class="text-center">
+                    <div class="row">
+                        <div class="col-4">
+                            <hr class="navbar-text color-yellow" />
+                        </div>
+                        <div class="col-4">
+                            <span class="text-danger">
+                                feu
+                                                                                            
+                                                            
+                            </span>
+                            <span class="text-white">
+                                de
+                                                                                            
+                                                            
+                            </span>
+                            <span class="text-success">
+                                bois
+                                                                                            
+                                                            
+                            </span>
+                        </div>
+                        <div class="col-4">
+                            <hr class="navbar-text color-yellow" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="navbar-toggler color-yellow bg-yellow" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon "></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle color-yellow fs-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-star"></i> Produits
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ path('app_front_promo') }}">
+                    <i class="fas fa-tags me-1"></i>Promos</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_front_pizza') }}">
+                    <i class="fas fa-pizza-slice me-1"></i>Pizzas</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_front_extra') }}">
+                    <i class="fas fa-utensils me-1"></i>Extras</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_front_dessert') }}">
+                    <i class="fas fa-ice-cream me-1"></i>Desserts</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_front_boisson') }}">
+                    <i class="fas fa-wine-bottle me-1"></i>Bouteille</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_front_canette') }}">
+                    <i class="fas fa-beer"></i>Canette</a></li>
+                </ul>
+            </li>
+                    </ul>
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link color-yellow" href="{{ path('app_admin') }}">
+                        <i class="fas fa-user-cog"></i> Admin
+                    </a>
+                </li>
+                {% endif %}
+                {% if app.user is null %}
+                <li class="nav-item">
+                    <a class="nav-link color-yellow" href="{{ path('app_register') }}">
+                        <i class="fas fa-user-plus"></i> Inscription
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link color-yellow" href="{{ path('app_login') }}">
+                        <i class="fas fa-sign-in-alt"></i> Connexion
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="">
+                        <i class="fas fa-user-circle"></i> Mon Compte
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link color-yellow" href="{{ path('app_logout') }}">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">
+                        <i class="fa fa-cart-arrow-down"></i> Panier
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+
+
+                    </div>
+                </div>
+            </nav>
+            

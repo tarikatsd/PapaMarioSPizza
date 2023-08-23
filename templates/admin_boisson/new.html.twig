@@ -1,0 +1,11 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Nouvelle Bouteille{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_admin_boisson_index') }}" class="btn btn-orange btn-sm mb-2">Retour a la liste</a>
+    <h1>Nouvelle Bouteille</h1>
+
+    {{ include('admin_boisson/_form.html.twig') }}
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Canette{% endblock %}
+
+{% block body %}
+<a href="{{ path('app_admin_canette_index') }}" class="btn btn-orange btn-sm mb-2">Retour a la liste</a>
+<div class="d-flex justify-content-between align-items-center">
+<h1>Canette</h1>
+<a class="btn btn-brown" href="{{ path('app_admin_canette_edit', {'id': canette.id}) }}">Modifiée</a>
+</div>
+    <table class="table">
+        <tbody>
+            <tr>
+            <a href="{{ asset('images/canette/' ~ canette.imageName) }}" data-lightbox="{{ canette.imageName }}"{% if canette.nom is not null%} data-title="{{canette.nom}}"{% endif %} >
+                    <img src="{{ asset('images/canette/' ~ canette.imageName) }}" alt="{{ canette.imageName }}" class="img-list"></a>
+                </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ canette.nom }}</td>
+            </tr>
+            <tr>
+                <th>Taille</th>
+                <td>{{ canette.taille }}</td>
+            </tr>
+            <tr>
+                <th>Activée</th>
+                <td>{{ canette.IsActive ? 'Oui' : 'Non' }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ canette.prix }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    {{ include('admin_canette/_delete_form.html.twig') }}
+{% endblock %}

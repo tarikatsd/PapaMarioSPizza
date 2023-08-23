@@ -1,0 +1,33 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}desserts{% endblock %}
+
+{% block body %}
+<a href="{{ path('app_admin_dessert_index') }}" class="btn btn-orange btn-sm mb-2">Retour a la liste</a>
+<div class="d-flex justify-content-between align-items-center">
+<h1>desserts</h1>
+<a class="btn btn-brown" href="{{ path('app_admin_dessert_edit', {'id': dessert.id}) }}">Modifiée</a>
+</div>
+    <table class="table">
+        <tbody>
+            <tr>
+            <a href="{{ asset('images/dessert/' ~ dessert.imageName) }}" data-lightbox="{{ dessert.imageName }}"{% if dessert.nom is not null%} data-title="{{dessert.nom}}"{% endif %} >
+                    <img src="{{ asset('images/dessert/' ~ dessert.imageName) }}" alt="{{ dessert.imageName }}" class="img-list"></a>
+                </tr>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ dessert.nom }}</td>
+                </tr>
+                <tr>
+                <th>Prix</th>
+                <td>{{ dessert.prix }}</td>
+                    <tr>
+                        <th>IsActive</th>
+                        <td>{{ dessert.isActive ? 'Oui' : 'Non' }}</td>
+                    </tr>
+            </tr>
+        </tbody>
+    </table>
+
+    {{ include('admin_dessert/_delete_form.html.twig') }}
+{% endblock %}

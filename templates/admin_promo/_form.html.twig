@@ -1,0 +1,88 @@
+{{ form_start(form) }}
+
+<div class="mb-3 row">
+    <div class="col-12 col-md-3 d-flex align-items-center">
+        {{ form_row(form.isActive) }}
+    </div>
+    <div class="col-12 col-md-6 ">
+        {{ form_row(form.nom) }}
+    </div>
+    <div class="col-12 col-md-3 ">
+        {{ form_row(form.prix) }}
+    </div>
+</div>
+
+<div class="mb-3 row">
+    <div class="col-12 col-md-3 d-flex align-items-center">
+        {{ form_row(form.checkallpizza) }}
+    </div>
+    <div class="col-12 col-md-6">
+    {{ form_row(form.pizza) }}
+</div>
+<div class="col-12 col-md-3">
+    {{ form_row(form.pizzaQuantity) }}
+</div>
+</div>
+
+<div class="mb-3 row">
+    <div class="col-12 col-md-3 d-flex align-items-center">
+        {{ form_row(form.checkallextra) }}
+    </div>
+    <div class="col-12 col-md-6">
+        {{ form_row(form.extra) }}
+    </div>
+    <div class="col-12 col-md-3">
+        {{ form_row(form.extraQuantity) }}
+    </div>
+</div>
+
+<div class="mb-3 row">
+    <div class="col-12 col-md-3 d-flex align-items-center">
+        {{ form_row(form.checkalldessert) }}
+    </div>
+    <div class="col-12 col-md-6">
+        {{ form_row(form.dessert) }}
+    </div>
+    <div class="col-12 col-md-3">
+        {{ form_row(form.dessertQuantity) }}
+    </div>
+</div>
+
+<div class="mb-3 row">
+    <div class="col-12 col-md-3 d-flex align-items-center">
+        {{ form_row(form.checkallboisson) }}
+    </div>
+    <div class="col-12 col-md-6">
+        {{ form_row(form.boisson) }}
+    </div>
+    <div class="col-12 col-md-3">
+        {{ form_row(form.boissonQuantity) }}
+    </div>
+</div>
+
+<div class="mb-3 row">
+    <div class="col-12 col-md-3 d-flex align-items-center">
+        {{ form_row(form.checkallcanette) }}
+    </div>
+    <div class="col-12 col-md-6">
+        {{ form_row(form.canette) }}
+    </div>
+    <div class="col-12 col-md-3">
+        {{ form_row(form.canetteQuantity) }}
+    </div>
+</div>
+
+<div class="mb-3">
+{{ form_row(form.imageFile) }}
+</div>
+
+<div class="mb-3">
+{{ form_row(form.description) }}
+</div>
+
+<div class="mb-3">
+<div class="d-flex justify-content-end">
+        <button class="btn btn-brown">{{ button_label|default('Sauvegarder') }}</button>
+    </div>
+</div>
+{{ form_end(form) }}

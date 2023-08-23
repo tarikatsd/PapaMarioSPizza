@@ -1,0 +1,103 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Promos  {% endblock %}
+
+{% block body %}
+<a href="{{ path('app_admin_promo_index') }}" class="btn btn-orange btn-sm mb-2">Retour a la liste</a>
+<div class="d-flex justify-content-between align-items-center">
+<h1>Promos</h1>
+<a class="btn btn-brown" href="{{ path('app_admin_promo_edit', {'id': promo.id}) }}">Modifiée</a>
+</div>
+    <table class="table">
+        <tbody>
+            <tr>
+            <a href="{{ asset('images/promo/' ~ promo.imageName) }}" data-lightbox="{{ promo.imageName }}"{% if promo.nom is not null%} data-title="{{promo.nom}}"{% endif %} >
+                    <img src="{{ asset('images/promo/' ~ promo.imageName) }}" alt="{{ promo.imageName }}" class="img-list"></a>
+                </tr>
+            <tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ promo.nom }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ promo.description }}</td>
+            <tr>
+                <th>Activée</th>
+                <td>{{ promo.isActive ? 'Oui' : 'Non' }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ promo.prix }}</td>
+            </tr>
+            <tr>
+                <th>Pizza</th>
+                    <td>{% for pizza in promo.pizza %}
+                        {{ pizza.nom }}/
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>Nombre de Pizza</th>
+                <td>
+                    {{ promo.pizzaQuantity }}
+                </td>
+            </tr>
+            <tr>
+                <th>Extra</th>
+                    <td>{% for extra in promo.extra %}
+                        {{ extra.nom }}/
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>Nombre d'Extra</th>
+                <td>
+                    {{ promo.extraQuantity }}
+                </td>
+            </tr>
+            <tr>
+                <th>Boisson</th>
+                    <td>{% for boisson in promo.boisson %}
+                        {{ boisson.nom }}/
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>Nombre de Boisson</th>
+                <td>
+                    {{ promo.boissonQuantity }}
+                </td>
+            </tr>
+            <tr>
+                <th>Canette</th>
+                    <td>{% for canette in promo.canette %}
+                        {{ canette.nom }}/
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>Nombre de Canette</th>
+                <td>
+                    {# {{ promo.canetteQuantity }} #}
+                </td>
+            <tr>
+                <th>Dessert</th>
+                    <td>{% for dessert in promo.dessert %}
+                        {{ dessert.nom }}/
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>Nombre de Dessert</th>
+                <td>
+                    {{ promo.dessertQuantity }}
+                </td>
+            </tr>
+
+        </body>
+    </table>
+
+
+    {{ include('admin_promo/_delete_form.html.twig') }}
+{% endblock %}

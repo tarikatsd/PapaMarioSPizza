@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Nos promo
+{% endblock %}
+
+{% block body %}
+    <h1 class="text-center mt-4 ">
+        Nos promos
+    </h1>
+    <div class="container mt-4">
+        <div class="row">
+            {% for promo in promos %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card card h-100 shadow">
+                        <img src="{{ asset('images/promo/' ~ promo.imageName) }}" class="card-img-top" alt="{{ promo.nom }}">
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="card-title">
+                                        {{ promo.nom }}
+                                    </h5>
+                                    <p class="card-text">
+                                        {{ promo.prix }}
+                                        €
+                                    </p>
+                                </div>
+                                <p class="card-text">
+                                    {{ promo.description }}
+                                </p>
+                                <div class="mt-auto d-flex justify-content-between">
+                                    <button type="button" class="btn btn-warning btn-modal-promo" data-promo-id="{{ promo.id }}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        <i class="fas fa-shopping-cart "></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------------------------ Modal ---------------------------->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    Choisissez vos produits
+                </h1>
+                <button type="button" class="btn-close btn-warning btn-close-modal-promo" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">
+                            Loading...
+                        </span>
+                    </div>
+                </div>
+            {# {% include 'front_promo/_form.html.twig' %} #}
+            </div>
+        </div>
+    </div>
+</div><!------------------------ Modal ---------------------------->
+{% block javascripts %}{% endblock %}
+<script>
+
+    $(".btn-modal-promo").on("click", function(event){
+        alert("ok");
+        event.preventDefault();
+        event.stopPropagation();
+        let promoId = $(this).data("promo-id");
+
+        $.ajax({
+            url : "/promo/getform",
+            type: "POST",
+            data: {
+                promoId: promoId
+            }, 
+        }).done(function(response){
+            $("#exampleModal .modal-body").html(response);
+            $('.select2').each(function(){
+                let max = $(this).attr("max");
+                $(this).select2({
+                    placeholder: 'Choisir un produit',
+                    allowClear: true,
+                    dropdownParent: $('#exampleModal'),
+                    maximumSelectionLength: max,
+                    minimumSelectionLength: max,
+                    language: {
+                        maximumSelected: function(e) {
+                            return "Vous ne pouvez pas sélectionner plus de " + e.maximum + " produits";
+                        },
+                        minimumSelected: function(e) {
+                            return "Vous devez sélectionner au moins " + e.minimum + " produits";
+                        },
+                    }
+                    
+                });
+            });
+            $('.select2').val(null).trigger('change');
+        });
+    });
+    $('.btn-close-modal-promo').on('click', function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        $("#exampleModal .modal-body").html('<div class="text-center"><div class="spinner-border text-warning" role="status"><span class="visually-hidden">Loading...</span></div></div>');
+    });
+</script>
+
+{% endblock %}

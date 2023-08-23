@@ -1,0 +1,43 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Ingrédients{% endblock %}
+
+{% block body %}
+        <div class="d-flex justify-content-between align-items-center">
+    <h1>Ingrédients</h1>
+            <a href="{{ path('app_admin_ingredient_new') }}" class="btn btn-brown">
+                Nouveau
+            </a>
+        </div>
+        <table class="table table-index table-striped table-responsive">
+            <thead>
+                <tr>
+                <th>Nom</th>
+                <th>prix</th>
+                <th>Activée</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ingredient in ingredients %}
+            <tr>
+                <td>{{ ingredient.nom }}</td>
+                <td>{{ ingredient.prix }}</td>
+                    <td>{{ ingredient.isActive ? 'Oui' : 'Non' }}</td>
+                    <td>
+                        <a href="{{ path('app_admin_ingredient_show', {'id': ingredient.id}) }}" class="btn btn-orange">
+                            <i class="align-middle" data-feather="eye"></i>
+                        </a>
+                        <a href="{{ path('app_admin_ingredient_edit', {'id': ingredient.id}) }}" class="btn btn-brown">
+                            <i class="align-middle" data-feather="edit-2"></i>
+                        </a>
+                    </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-start">Aucun ingrédient trouvé</td>    
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

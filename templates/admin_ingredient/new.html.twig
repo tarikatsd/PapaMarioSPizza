@@ -1,0 +1,12 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Nouvel Ingredient{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_admin_ingredient_index') }}" class="btn btn-orange btn-sm mb-2">Retour a la liste</a>
+    <h1>Nouvel Ingredient</h1>
+
+    {{ include('admin_ingredient/_form.html.twig') }}
+
+{% endblock %}
+

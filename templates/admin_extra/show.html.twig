@@ -1,0 +1,33 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}extras{% endblock %}
+
+{% block body %}
+<a href="{{ path('app_admin_extra_index') }}" class="btn btn-orange btn-sm mb-2">Retour a la liste</a>
+<div class="d-flex justify-content-between align-items-center">
+<h1>extras</h1>
+<a class="btn btn-brown" href="{{ path('app_admin_extra_edit', {'id': extra.id}) }}">Modifiée</a>
+</div>
+    <table class="table">
+        <tbody>
+            <tr>
+            <a href="{{ asset('images/extra/' ~ extra.imageName) }}" data-lightbox="{{ extra.imageName }}"{% if extra.nom is not null%} data-title="{{extra.nom}}"{% endif %} >
+                    <img src="{{ asset('images/extra/' ~ extra.imageName) }}" alt="{{ extra.imageName }}" class="img-list"></a>
+                </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ extra.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ extra.prix }}</td>
+            </tr>
+            <tr>
+            <th>Activée</th>
+            <td>{{ extra.isActive ? 'Oui' : 'Non' }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    {{ include('admin_extra/_delete_form.html.twig') }}
+{% endblock %}

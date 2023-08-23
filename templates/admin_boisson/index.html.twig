@@ -1,0 +1,54 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}
+    Bouteilles
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>
+            Bouteilles 
+        </h1>
+        <a href="{{ path('app_admin_boisson_new') }}" class="btn btn-brown">
+            Nouveau
+        </a>
+    </div>
+    <table class="table table-index table-striped table-responsive">
+        <thead>
+            <tr>
+            <th>Image</th>
+            <th>Nom</th>
+            <th>Taille</th>
+            <th>Prix</th>
+            <th>Activée</th>
+            <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for boisson in boissons %}
+            <tr>
+                <td>
+                <a href="{{ asset('images/boisson/' ~ boisson.imageName) }}" data-lightbox="{{ boisson.imageName }}"{% if boisson.nom is not null%} data-title="{{boisson.nom}}"{% endif %} >
+                        <img src="{{ asset('images/boisson/' ~ boisson.imageName) }}" alt="{{ boisson.imageName }}" class="img-list"></a>
+                    </td>
+            <td>{{ boisson.nom }}</td>
+            <td>{{ boisson.taille }}</td>
+            <td>{{ boisson.prix }}</td>
+            <td>{{ boisson.IsActive ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <a href="{{ path('app_admin_boisson_show', {'id': boisson.id}) }}" class="btn btn-orange">
+                <i class="align-middle" data-feather="eye"></i>
+                </a>
+                <a href="{{ path('app_admin_boisson_edit', {'id': boisson.id}) }}" class="btn btn-brown">
+                <i class="align-middle" data-feather="edit-2"></i>
+                </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6"class="text-start">Aucun donnee trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

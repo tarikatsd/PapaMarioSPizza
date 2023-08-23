@@ -1,0 +1,41 @@
+vich_uploader:
+    db_driver: orm
+    metadata:
+        type: attribute
+    mappings:
+        home:
+            uri_prefix: /images/home
+            upload_destination: '%kernel.project_dir%/public/images/home'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        pizza:
+            uri_prefix: /images/pizza
+            upload_destination: '%kernel.project_dir%/public/images/pizza'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        promo:
+            uri_prefix: /images/promo
+            upload_destination: '%kernel.project_dir%/public/images/promo'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        dessert:
+            uri_prefix: /images/dessert
+            upload_destination: '%kernel.project_dir%/public/images/dessert'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        boisson:
+            uri_prefix: /images/boisson
+            upload_destination: '%kernel.project_dir%/public/images/boisson'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        extra:
+            uri_prefix: /images/extra
+            upload_destination: '%kernel.project_dir%/public/images/extra'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        carousel:
+            uri_prefix: /images/carousel
+            upload_destination: '%kernel.project_dir%/public/images/carousel'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        reseauSocial:
+            uri_prefix: /images/reseauSocial
+            upload_destination: '%kernel.project_dir%/public/images/reseauSocial'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+        canette:
+            uri_prefix: /images/canette
+            upload_destination: '%kernel.project_dir%/public/images/canette'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer

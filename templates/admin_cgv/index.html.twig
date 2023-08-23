@@ -1,0 +1,45 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Conditions générales de vente  {% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>
+            Conditions générales de vente 
+        </h1>
+        <a href="{{ path('app_admin_cgv_new') }}" class="btn btn-brown">
+            Nouveau
+        </a>
+    </div>
+    <table class="table table-index table-striped table-responsive">
+        <thead>
+            <tr>
+                <th>Texte</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cgv in cgvs %}
+            <tr>
+                <td>{{ cgv.texte }}</td>
+                    <td>
+                    <a href="{{ path('app_admin_cgv_show', {'id': cgv.id}) }}" class="btn btn-orange">
+                        <i class="align-middle" data-feather="eye"></i>
+                    </a>
+                    <a href="{{ path('app_admin_cgv_edit', {'id': cgv.id}) }}" class="btn btn-brown">
+                        <i class="align-middle" data-feather="edit-2"></i>
+                    </a>
+                    
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3"class="text-start">
+                    Aucune condition générale de vente enregistrée.
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

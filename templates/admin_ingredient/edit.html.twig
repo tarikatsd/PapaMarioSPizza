@@ -1,0 +1,19 @@
+{% extends 'base-backend.html.twig' %}
+
+{% block title %}Modifiée les Ingredients{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_admin_ingredient_index') }}" class="btn btn-dark btn-sm mb-2">Retour a la liste</a>
+    
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h1>Modifiée les Ingredients</h1>
+
+                {{ include('admin_ingredient/_delete_form.html.twig') }}
+
+        </div>
+        
+        {{ include('admin_ingredient/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+
+{% endblock %}
