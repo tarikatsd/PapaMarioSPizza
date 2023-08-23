@@ -41,7 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $telephone = null;
 
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Adresse::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Adresse::class,orphanRemoval: true, cascade:['persist','remove'])]
     private Collection $adresse;
 
     #[ORM\Column(type: 'boolean')]

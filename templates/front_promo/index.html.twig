@@ -63,16 +63,19 @@
             </div>
         </div>
     </div>
-</div><!------------------------ Modal ---------------------------->
-{% block javascripts %}{% endblock %}
-<script>
+</div>
 
+<!------------------------ Modal ---------------------------->
+{% endblock %}
+{% block javascripts %}
+<script>
+    
     $(".btn-modal-promo").on("click", function(event){
-        alert("ok");
         event.preventDefault();
         event.stopPropagation();
         let promoId = $(this).data("promo-id");
-
+        
+        //alert("ok");
         $.ajax({
             url : "/promo/getform",
             type: "POST",

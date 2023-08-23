@@ -28,7 +28,7 @@ class UserFixtures extends Fixture
     {
         $user = new User();
         $user->setEmail('tarikaitsaid33@gmail.com');
-        $user->setPassword($this->encoder->hashPassword($user, 'Medine010523@'));
+        $user->setPassword($this->encoder->hashPassword($user, 'Tarobr93300@'));
         $user->setRoles(['ROLE_ADMIN']);
         $user->setNom('Ait-said');
         $user->setPrenom('Tarik');
@@ -40,7 +40,7 @@ class UserFixtures extends Fixture
 
         $user = new User();
         $user->setEmail('idrissslimani999@gmail.com');
-        $user->setPassword($this->encoder->hashPassword($user, 'Medine010523@'));
+        $user->setPassword($this->encoder->hashPassword($user, 'Tarobr93300@'));
         $user->setRoles(['ROLE_USER']);
         $user->setNom('Slimani');
         $user->setPrenom('Idriss');

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
+use App\Repository\ReseauSocialRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,7 +28,7 @@ class ResetPasswordController extends AbstractController
 
     public function __construct(
         private ResetPasswordHelperInterface $resetPasswordHelper,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -35,7 +36,7 @@ class ResetPasswordController extends AbstractController
      * Display & process form to request a password reset.
      */
     #[Route('', name: 'app_forgot_password_request')]
-    public function request(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
+    public function request(Request $request, MailerInterface $mailer, TranslatorInterface $translator,ReseauSocialRepository $reseauSocialRepository): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
@@ -50,6 +51,7 @@ class ResetPasswordController extends AbstractController
 
         return $this->render('reset_password/request.html.twig', [
             'requestForm' => $form->createView(),
+            'reseauSocials' => $reseauSocialRepository->findAll(),
         ]);
     }
 
@@ -57,7 +59,7 @@ class ResetPasswordController extends AbstractController
      * Confirmation page after a user has requested a password reset.
      */
     #[Route('/check-email', name: 'app_check_email')]
-    public function checkEmail(): Response
+    public function checkEmail(ReseauSocialRepository $reseauSocialRepository): Response
     {
         // Generate a fake token if the user does not exist or someone hit this page directly.
         // This prevents exposing whether or not a user was found with the given email address or not
@@ -67,6 +69,7 @@ class ResetPasswordController extends AbstractController
 
         return $this->render('reset_password/check_email.html.twig', [
             'resetToken' => $resetToken,
+            'reseauSocials' => $reseauSocialRepository->findAll(),
         ]);
     }
 
@@ -74,7 +77,8 @@ class ResetPasswordController extends AbstractController
      * Validates and process the reset URL that the user clicked in their email.
      */
     #[Route('/reset/{token}', name: 'app_reset_password')]
-    public function reset(Request $request, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, string $token = null): Response
+    public function reset(Request $request, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, string $token = null,
+    ReseauSocialRepository $reseauSocialRepository): Response
     {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -122,10 +126,12 @@ class ResetPasswordController extends AbstractController
             $this->cleanSessionAfterReset();
 
             return $this->redirectToRoute('app_login');
+            $this->addFlash('success', 'Votre mot de passe a été modifié avec succès');
         }
 
         return $this->render('reset_password/reset.html.twig', [
             'resetForm' => $form->createView(),
+            'reseauSocials' => $reseauSocialRepository->findAll(),
         ]);
     }
 

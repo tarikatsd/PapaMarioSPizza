@@ -17,13 +17,13 @@ class Adresse
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255 ,nullable: true)]
     private ?string $voie = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $codePostal = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255 ,nullable: true)]
     private ?string $ville = null;
 
     #[ORM\Column(length: 255, nullable: true)]

@@ -39,7 +39,7 @@ class ConfigPromoType extends AbstractType
             "max"=> (!is_null($options['max_boisson']) ? $options['max_boisson'] : "")]])
         ;
         }
-        if($options['has_extra']){
+        if($options['has_canette']){
             $builder
             ->add('canette',EntityType::class,["class"=>Canette::class,"multiple"=>true,'required'=>false,"attr"=>["class"=>"select2",
             "max"=> (!is_null($options['max_canette']) ? $options['max_canette'] : "")]])  
@@ -55,6 +55,7 @@ class ConfigPromoType extends AbstractType
             'has_extra'=>true,
             'has_dessert'=>true,
             'has_boisson'=>true,
+            'has_canette'=>true,
             'max_extra'=>null,
             'max_dessert'=>null,
             'max_boisson'=>null,
