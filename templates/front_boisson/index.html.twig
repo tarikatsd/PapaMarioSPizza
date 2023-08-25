@@ -1,9 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos Boissons{% endblock %}
+{% block title %}
+    Nos Bouteilles
+{% endblock %}
 
 {% block body %}
-    <h1 class="text-center mt-4">Nos Boissons</h1>
+    <h1 class="text-center mt-4">
+    <i class="fas fa-wine-bottle me-1"></i>
+    Nos Bouteilles
+    </h1>
     <div class="container mt-4">
         <div class="row">
             {% for boisson in boissons %}
@@ -22,8 +27,9 @@
                             <i class="fas fa-euro"></i>
                         </p>
                     </span>
-
-                            <a href="#" class="btn btn-warning"><i class="fas fa-shopping-cart"></i></a>
+                        <button class="btn btn-warning btn-add-boisson" data-boisson-id="{{ boisson.id }}">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
                         </div>
                     </div>
                 </div>
@@ -31,4 +37,23 @@
             {% endfor %}
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+    $(".btn-add-boisson").on("click", function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        let boissonId = $(this).data("boisson-id");
+        $.ajax({
+            url : "/boisson/panier",
+            type: "POST",
+            data: {
+                boissonId: boissonId,
+                },
+                }).done(function(response){
+
+                    });
+    });
+
+</script>
 {% endblock %}

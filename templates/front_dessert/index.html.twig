@@ -3,7 +3,9 @@
 {% block title %}Nos Dessert{% endblock %}
 
 {% block body %}
-    <h1 class="text-center mt-4">Nos Desserts</h1>
+    <h1 class="text-center mt-4">
+    <i class="fas fa-ice-cream me-1"></i>
+    Nos Desserts</h1>
     <div class="container mt-4">
         <div class="row">
             {% for dessert in desserts %}
@@ -16,7 +18,9 @@
                         <p class="card-text">{{ dessert.prix }} €</p>
                     </div>
                         <div class="mt-auto d-flex justify-content-between">
-                        <a href="#" class="btn btn-warning"><i class="fas fa-shopping-cart"></i></a>
+                        <button class="btn btn-warning btn-add-dessert" data-dessert-id="{{ dessert.id }}">
+                        <i class="fas fa-shopping-cart"></i>
+                        </button>
                         </div>
                     </div>
                 </div>
@@ -25,3 +29,22 @@
         </div>
     </div>
 {% endblock %}
+{% block javascripts %}
+<script>
+    $(".btn-add-dessert").on("click", function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        let dessertId = $(this).data("dessert-id");
+        $.ajax({
+            url : "/dessert/panier",
+            type: "POST",
+            data: {
+                dessertId: dessertId,
+                },
+                }).done(function(response){
+
+                    });
+    });
+
+</script>
+                {% endblock %}

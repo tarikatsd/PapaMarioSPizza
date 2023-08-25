@@ -3,7 +3,9 @@
 {% block title %}Nos Canettes{% endblock %}
 
 {% block body %}
-    <h1 class="text-center mt-4">Nos Canettes</h1>
+    <h1 class="text-center mt-4">
+    <i class="fas fa-beer"></i>
+    Nos Canettes</h1>
     <div class="container mt-4">
         <div class="row">
             {% for canette in canettes %}
@@ -22,8 +24,9 @@
                             <i class="fas fa-euro"></i>
                         </p>
                     </span>
-
+                    <button class="btn btn-warning btn-add-canette" data-canette-id="{{ canette.id }}">
                             <a href="#" class="btn btn-warning"><i class="fas fa-shopping-cart"></i></a>
+                        </button>
                         </div>
                     </div>
                 </div>
@@ -32,3 +35,22 @@
         </div>
     </div>
 {% endblock %}
+{% block javascripts %}
+<script>
+    $(".btn-add-canette").on("click", function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        let canetteId = $(this).data("canette-id");
+        $.ajax({
+            url : "/canette/panier",
+            type: "POST",
+            data: {
+                canetteId: canetteId,
+                },
+                }).done(function(response){
+
+                    });
+    });
+
+</script>
+                {% endblock %}

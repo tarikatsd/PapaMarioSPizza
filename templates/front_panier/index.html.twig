@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FrontPanierController!{% endblock %}
+
+{% block body %}
+<h1>Votre panier</h1>
+{% if pizzas|length > 0 %}
+    {% for pizza in pizzas %}
+    <h2>{{ pizza[0].nom }}</h2>
+    <p>Prix : {{pizza[1]}}</p>
+    <p>Ingrédients :</p>
+        <ul>
+        {% for ingredient in pizza[2] %}
+            <li>{{ ingredient.nom }}</li>
+        {% endfor %}
+    </ul>
+    <p>Compléments :</p>
+        <ul>
+            {% for ingredient in pizza[3] %}
+                <li>{{ ingredient.nom }} {{ ingredient.prix }} </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% endif %}
+{% endblock %}

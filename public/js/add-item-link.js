@@ -1,6 +1,7 @@
 const addAdresseFormDeleteLink = (item) => {
   const removeFormButton = document.createElement('button');
-  removeFormButton.innerText = 'Delete this tag';
+  removeFormButton.classList.add('btn', 'btn-danger', 'btn-sm', 'mt-2');
+  removeFormButton.innerText = 'Suprimmer cette adresse';
 
   item.append(removeFormButton);
 
@@ -39,11 +40,6 @@ document
       btn.addEventListener("click", addFormToCollection)
   });
 
-document
-  .querySelectorAll('ul.adresse .img-form-container')
-  .forEach((item) => {
-      addImageFormDeleteLink(item);
-  })
     document
     .querySelectorAll('ul.adresse li')
     .forEach((adresse) => {

@@ -3,7 +3,9 @@
 {% block title %}Nos Extra{% endblock %}
 
 {% block body %}
-    <h1 class="text-center mt-4">Nos Extras</h1>
+    <h1 class="text-center mt-4">
+    <i class="fas fa-utensils me-1"></i>
+    Nos Extras</h1>
     <div class="container mt-4">
         <div class="row">
             {% for extra in extras %}
@@ -16,7 +18,9 @@
                         <p class="card-text">{{ extra.prix }} €</p>
                     </div>
                         <div class="mt-auto d-flex justify-content-between">
-                        <a href="#" class="btn btn-warning"><i class="fas fa-shopping-cart"></i></a>
+                        <button class="btn btn-warning btn-add-extra" data-extra-id="{{ extra.id }}">
+                        <i class="fas fa-shopping-cart"></i>
+                        </button>
                         </div>
                     </div>
                 </div>
@@ -25,3 +29,22 @@
         </div>
     </div>
 {% endblock %}
+{% block javascripts %}
+<script>
+    $(".btn-add-extra").on("click", function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        let extraId = $(this).data("extra-id");
+        $.ajax({
+            url : "/extra/panier",
+            type: "POST",
+            data: {
+                extraId: extraId,
+                },
+                }).done(function(response){
+
+                    });
+    });
+
+</script>
+                {% endblock %}

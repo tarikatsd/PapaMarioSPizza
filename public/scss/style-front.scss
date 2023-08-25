@@ -1,23 +1,38 @@
-
-body{
-        background-color: rgba(212, 212, 212, 0.515);
-        .navbar{
-        h1{
-        margin-top: 0;
-        margin-bottom: 0;
+@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
+body {
+    background-color: rgba(212, 212, 212, 0.515);
+    font-family: 'Poppins', sans-serif;
+    @for $i from 1 through 6 {
+        h#{$i} {
+            font-family: 'Black Ops One', sans-serif;
+            color: #9c5e00;
+        }
     }
-        .navbar-nav{
-            .nav-item{
-                .nav-link{
+    .navbar {
+        h1{
+            margin-top: 0;
+            margin-bottom: 0;
+            font-family: 'Fredericka the Great', sans-serif;
+        }
+
+        .navbar-nav {
+            .nav-item {
+                .nav-link {
                     color: #e78c01;
-                    &:hover{
-                        color:#9c5e00;
+
+                    &:hover {
+                        color: #9c5e00;
                     }
-                }.dropdown-menu{
+                }
+
+                .dropdown-menu {
                     background-color: #582900;
-                    .dropdown-item{
+
+                    .dropdown-item {
                         color: #e78c01;
-                        &:hover{
+
+                        &:hover {
                             background-color: #e78c01;
                             color: #582900;
                         }
@@ -25,50 +40,69 @@ body{
                 }
             }
         }
-    }.modal{
-        .modal-content{
-            .modal-header{
+    }
+
+    .modal {
+        .modal-content {
+            .modal-header {
                 background-color: #582900;
-                .modal-title,.btn-close{
-                color: #e78c01;
+
+                .modal-title,
+                .btn-close {
+                    color: #e78c01;
                 }
             }
         }
     }
-    .bg-yellow{
+
+    .bg-yellow {
         background-color: #e78c01;
-    }.color-yellow{
+    }
+
+    .color-yellow {
         color: #e78c01;
-    }.bg-brown{
+    }
+
+    .bg-brown {
         background-color: #582900;
-    }.btn-brown{
+    }
+
+    .btn-brown {
         background-color: #582900;
         color: white;
-        &:hover{
-            background-color: rgba($color:#582900, $alpha: 0.2);
+
+        &:hover {
+            background-color: rgba($color: #582900, $alpha: 0.2);
         }
-    } .btn-orange{
-        background-color:  #e78c01;
+    }
+
+    .btn-orange {
+        background-color: #e78c01;
         color: white;
-        &:hover{
+
+        &:hover {
             background-color: rgba($color: #e78c01, $alpha: 0.2);
         }
-    } .btn-red{
-        background-color:  #e73701;
-        color: white;
-        &:hover{
-        background-color: rgba($color:#e73701, $alpha: 0.2);
-        
     }
-    }/* Ajoutez une classe pour le footer */
-.footer {
-    position: relative;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #582900;
-    color: #e78c01;
-    padding: 20px;
-    text-align: center;
+
+    .btn-red {
+        background-color: #e73701;
+        color: white;
+
+        &:hover {
+            background-color: rgba($color: #e73701, $alpha: 0.2);
+
+        }
+    }
+
+    .footer {
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #582900;
+        color: #e78c01;
+        padding: 20px;
+        text-align: center;
+    }
 }
-}
+
