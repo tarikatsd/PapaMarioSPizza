@@ -7,6 +7,7 @@ use App\Repository\ReseauSocialRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -16,29 +17,38 @@ class FrontExtraController extends AbstractController
     public function modifextra(Request $request, extraRepository $extraRepository, SessionInterface $session): Response
     {
         $extraId = $request->request->get("extraId");
+        $quantity = $request->request->get("quantity");
         $extra = $extraRepository->find($extraId);
-
-        // Faites ici ce que vous voulez pour ajouter la extra au panier
-        // Par exemple, vous pouvez ajouter des données au panier de la même manière que pour les pizzas
-
+        
+        // Créer un identifiant unique en combinant l'ID et le nom de la extra
+        $uniqueIdentifier = $extra->getId() . '_' . str_replace(' ', '', $extra->getNom());
+        
         // On récupère le panier en session
         $panier = $session->get("panier", []);
-
-        // Ajoutez la extra au panier (similaire à ce que vous avez fait pour les pizzas)
-        $panier[$extra->getId()] = [$extra->getPrix(),"type" => "extra"];
-
-
-
+        
+        // Vérifier si la extra existe déjà dans le panier
+        if (isset($panier[$uniqueIdentifier])) {
+            // Mise à jour de la quantité de la extra existante
+            $panier[$uniqueIdentifier]["quantity"] += $quantity;
+            // Mise à jour du prix total pour la extra
+            $panier[$uniqueIdentifier]["totalPrice"] = $extra->getPrix() * $panier[$uniqueIdentifier]["quantity"];
+        } else {
+            // Ajout de la extra au panier
+            $panier[$uniqueIdentifier] = [
+                "quantity" => $quantity,
+                "type" => "extra",
+                "totalPrice" => $extra->getPrix() * $quantity // Calcul du prix total initial
+            ];
+        }
+        
         // Mettez à jour le panier en session
         $session->set("panier", $panier);
         
-            dd($panier);
+        
+        // Répondez par un message JSON pour indiquer le succès
+        return new JsonResponse(['success' => true]);
 
-        // Répondez par exemple avec un message JSON pour indiquer que la extra a été ajoutée au panier
-        return $this->json(['message' => 'extra ajoutée au panier']);
     }
-
-
 
     #[Route('/extra', name: 'app_front_extra')]
     public function index(ExtraRepository $extraRepository,ReseauSocialRepository $reseauSocialRepository): Response

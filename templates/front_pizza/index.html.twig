@@ -6,6 +6,7 @@
 
 
 {% block body %}
+<div id="success-message" ></div>
     <h1 class="text-center mt-4 ">
     <i class="fas fa-pizza-slice me-1"></i>
         Nos Pizzas
@@ -31,6 +32,7 @@
                                     /
                                 {% endfor %}
                                 <div class="mt-auto d-flex justify-content-between">
+                                <input type="number" class="quantity" value="1" min="1" max="20" >
                                     <button type="button" class="btn btn-warning btn-modal-pizza" data-pizza-id="{{ pizza.id }}" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                         <i class="fas fa-shopping-cart "></i>
                                     </button>
@@ -68,7 +70,12 @@
     {% endblock %}
 {% block javascripts %}
 <script>
+    let quantity = 0;
     $(".btn-modal-pizza").on("click", function(event){
+        quantity = $(this).siblings(".quantity").val();
+        if (quantity == 0)  {
+            quantity = 1;
+        }
         event.preventDefault();
         event.stopPropagation();
         let pizzaId = $(this).data("pizza-id");
@@ -77,7 +84,8 @@
             url : "/pizza/getform",
             type: "POST",
             data: {
-                pizzaId: pizzaId
+                pizzaId: pizzaId,
+                quantity: quantity,
             },
         }).done(function(response){
             $("#exampleModal .modal-body").html(response);
@@ -90,11 +98,15 @@
                     type: "POST",
                     data:{
                         pizzaId: pizzaId,
+                        quantity: quantity,
                         ingredients :$("#config_pizza_ingredient").val(),
                     }
                 })
                 .done(function(response){
                     $("#exampleModal").modal('hide');
+                    if (response.success) {
+                        $("#success-message").text("La pizza a bien été ajoutée au panier").fadeIn().delay(2000).fadeOut();
+                    }
                     //alert('ok');
                 })
                 //alert('ok');

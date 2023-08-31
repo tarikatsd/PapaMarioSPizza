@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block body %}
+<div id="success-message" ></div>
     <h1 class="text-center mt-4">
     <i class="fas fa-wine-bottle me-1"></i>
     Nos Bouteilles
@@ -27,7 +28,8 @@
                             <i class="fas fa-euro"></i>
                         </p>
                     </span>
-                        <button class="btn btn-warning btn-add-boisson" data-boisson-id="{{ boisson.id }}">
+                            <input type="number" class="quantity" value="1" min="1" max="20" >
+                                <button class="btn btn-warning btn-add-boisson" data-boisson-id="{{ boisson.id }}">
                             <i class="fas fa-shopping-cart"></i>
                         </button>
                         </div>
@@ -40,7 +42,12 @@
 {% endblock %}
 {% block javascripts %}
 <script>
+    let quantity = 0;
     $(".btn-add-boisson").on("click", function(event){
+        quantity = $(this).siblings(".quantity").val();
+        if (quantity == 0)  {
+            quantity = 1;
+        }
         event.preventDefault();
         event.stopPropagation();
         let boissonId = $(this).data("boisson-id");
@@ -49,9 +56,12 @@
             type: "POST",
             data: {
                 boissonId: boissonId,
+                quantity: quantity,
                 },
                 }).done(function(response){
-
+                    if (response.success) {
+                        $("#success-message").text("La bouteille a bien été ajoutée au panier").fadeIn().delay(2000).fadeOut();
+                    }
                     });
     });
 

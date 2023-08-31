@@ -2,109 +2,124 @@
 
 namespace App\Controller;
 
-use App\Repository\ExtraRepository;
-use App\Repository\PizzaRepository;
 use App\Repository\BoissonRepository;
+use App\Repository\PizzaRepository;
 use App\Repository\CanetteRepository;
 use App\Repository\DessertRepository;
+use App\Repository\ExtraRepository;
 use App\Repository\IngredientRepository;
+use App\Repository\PromoRepository;
 use App\Repository\ReseauSocialRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Translation\Extractor\ExtractorInterface;
 
 class FrontPanierController extends AbstractController
 {
-//     #[Route('/panier', name: 'app_front_panier')]
-//     public function index(SessionInterface $sessionInterface, ReseauSocialRepository $reseauSocialRepository, PizzaRepository $pizzaRepository, IngredientRepository $ingredientRepository): Response
-//     {
-//         $sessionInterface->clear();
-//         $panier = $sessionInterface->get("panier", []);
-//         // dd($panier);
-//         // if($panier[count($panier)-1] == "pizza"){
-//         //     array_pop($panier);
-//         // }
-//         $pizzas = [];
-//         foreach($panier as $key => $value){
-//             // dump("coucou");
-//             $pizza = $pizzaRepository->find($key);
-//             // $tab est un tableua qui contient en 0 la pizza en 1 le prix total, en 2 tous les ingredients en 3 les ingrédients plus 
-//             // dd($value[1]);
-//             $ingrediantBaseTab = [];
-//             // On passe en revue tous les ingrédient et pour ceux qui ne sont pas des suppléments on les ajoute au tableau $ingrediantBaseTab
-//             foreach($value[1] as $ingredientId){
-//                 if(!in_array($ingredientId, $value[2])){
-//                     $ingredient = $ingredientRepository->find($ingredientId);
-//                     array_push($ingrediantBaseTab, $ingredient);
-//                 }
-//             }
-//             $incredientSupplementTab = [];
-//             foreach($value[2] as $ingredientId){
-//                 $ingredient = $ingredientRepository->find($ingredientId);
-//                 array_push($incredientSupplementTab, $ingredient);
-//             }
-
-//             $tab = [];
-//             $tab[0] = $pizza;
-//             $tab[1] = $value[0];
-//             $tab[2] = $ingrediantBaseTab;
-//             $tab[3] = $incredientSupplementTab;
-//             array_push($pizzas, $tab);
-//         }
-//         // On passe en revue le panier en clé valeurs
-
-//         // dd($pizzas);
-//         return $this->render('front_panier/index.html.twig', [
-//             'reseauSocials' => $reseauSocialRepository->findAll(),
-//             'pizzas' => $pizzas,
-//         ]);
-//     }
-// }
-
-            #[Route('/panier', name: 'app_front_panier')]
-            public function index(
-                SessionInterface $sessionInterface,
-                ReseauSocialRepository $reseauSocialRepository,
-                PizzaRepository $pizzaRepository,
-                BoissonRepository $boissonRepository
-            ): Response
-            {
-
-                $panier = $sessionInterface->get("panier", []);
-                $items = [];
-                $pizzas = [];
-                
-                dd($pizzas);
-                foreach ($panier as $key => $value) {
-                    if (isset($value["type"])) {
-                        if ($value["type"] === "pizza") {
-                        $pizza = $pizzaRepository->find($key);
-                        // ... gérer les ingrédients et suppléments
-                        $pizzas[] = [
-                            "product" => $pizza,
-                            "price" => $value[0],
-                            "ingredients" => $ingrediantBaseTab,
-                            "supplements" => $incredientSupplementTab,
-                            "type" => "pizza",
-                        ];
-                    } elseif ($value["type"] === "boisson" || $value["type"] === "canette" || $value["type"] === "dessert" || $value["type"] === "extra") {
-                        // Traitez les autres types de produits de la même manière
-                        $product = $boissonRepository->find($key); // ou autre type de produit
-                        $items[] = [
-                            "product" => $product,
-                            "price" => $value[0],
-                            "type" => $value["type"],
-                        ];
-                    }
-                }
-                
-                return $this->render('front_panier/index.html.twig', [
-                    'reseauSocials' => $reseauSocialRepository->findAll(),
-                    'pizzas' => $pizzas,
-                    // 'pizzas' => $pizzas
-                ]);
-            }
-        }
-    }
+    #[Route('/panier', name: 'app_front_panier')]
+    public function index(
+        SessionInterface $sessionInterface,
+        PizzaRepository $pizzaRepository,
+        IngredientRepository $ingredientRepository,
+        CanetteRepository $canetteRepository,
+        ReseauSocialRepository $reseauSocialRepository,
+        DessertRepository $dessertRepository,
+        BoissonRepository $boissonRepository,
+        PromoRepository $promoRepository,
+        ExtraRepository $extraRepository,
         
+    ): Response {
+
+        // $sessionInterface->clear();
+        $panier = $sessionInterface->get("panier", []);
+        $pizzas = [];
+        $canettes = [];
+        $desserts = [];
+        $boissons = [];
+        $extras = [];
+        $promos = [];
+        $prixTotal = 0;
+
+        // dd($panier);
+        foreach ($panier as $key => $item) {
+            $lastKey = $item['type'];
+            if ($lastKey === "pizza") {
+
+            $pizza = $pizzaRepository->find($key);
+            $ingredientsAdded = [];
+            $ingredientsRemoved = [];
+    
+            foreach ($item['ingredientsAdded'] as $ingredientId) {
+                $ingredientAdded = $ingredientRepository->find($ingredientId);
+                array_push($ingredientsAdded, $ingredientAdded);
+            }
+    
+            // Vérification si $item['ingredientsRemoved'] n'est pas null
+            if (isset($item['ingredientsRemoved']) && is_array($item['ingredientsRemoved'])) {
+                foreach ($item['ingredientsRemoved'] as $ingredientId) {
+                    $ingredientRemoved = $ingredientRepository->find($ingredientId);
+                    array_push($ingredientsRemoved, $ingredientRemoved);
+                }
+            }
+    
+            array_push($pizzas, [
+                'type' => 'pizza',
+                'pizza' => $pizza,
+                'totalPrice' => $item['totalPrice'],
+                'quantity' => $item['quantity'],
+                'ingredientsAdded' => $ingredientsAdded,
+                'ingredientsRemoved' => $ingredientsRemoved,
+            ]);
+            } elseif ($lastKey === "canette") {
+                $canette = $canetteRepository->find($key);
+                array_push($canettes, [
+                    'canette' => $canette,
+                    'quantity' => $item['quantity'],
+                    'totalPrice' => $canette->getPrix() * $item['quantity'],
+                ]);
+            } elseif ($lastKey === "dessert") {
+                $dessert = $dessertRepository->find($key);
+                array_push($desserts, [
+                    'dessert' => $dessert,
+                    'quantity' => $item['quantity'],
+                    'totalPrice' => $dessert->getPrix() * $item['quantity'],
+                ]);
+            } elseif ($lastKey === "boisson") {
+                $boisson = $boissonRepository->find($key);
+                array_push($boissons, [
+                    'boisson' => $boisson,
+                    'quantity' => $item['quantity'],
+                    'totalPrice' => $boisson->getPrix() * $item['quantity'],
+                ]);
+            } elseif ($lastKey === "extra") {
+                $extra = $extraRepository->find($key);
+                array_push($extras, [
+                    'extra' => $extra,
+                    'quantity' => $item['quantity'],
+                    'totalPrice' => $extra->getPrix() * $item['quantity'],
+                ]);
+            } elseif ($lastKey === "promo") {
+                $promo = $promoRepository->find($key);
+                array_push($promos, [
+                    'promo' => $promo,
+                    'quantity' => $item['quantity'],
+                ]);
+            } 
+            $prixTotal = $pizza->getPrix() * $item['quantity'] += $prixTotal;
+        }
+
+        return $this->render('front_panier/index.html.twig', [
+            'reseauSocials' => $reseauSocialRepository->findAll(),
+            'pizzas' => $pizzas,
+            'canettes' => $canettes,
+            'desserts' => $desserts,
+            'boissons' => $boissons,
+            'extras' => $extras,
+            'promos' => $promos,
+            // 'total' => $sessionInterface->get('total'),
+            'panier' => $panier,
+        ]);
+    }
+}

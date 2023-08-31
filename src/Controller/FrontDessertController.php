@@ -7,6 +7,7 @@ use App\Repository\ReseauSocialRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -16,26 +17,37 @@ class FrontDessertController extends AbstractController
     public function modifdessert(Request $request, dessertRepository $dessertRepository, SessionInterface $session): Response
     {
         $dessertId = $request->request->get("dessertId");
+        $quantity = $request->request->get("quantity");
         $dessert = $dessertRepository->find($dessertId);
-
-        // Faites ici ce que vous voulez pour ajouter la dessert au panier
-        // Par exemple, vous pouvez ajouter des données au panier de la même manière que pour les pizzas
-
+        
+        // Créer un identifiant unique en combinant l'ID et le nom de la dessert
+        $uniqueIdentifier = $dessert->getId() . '_' . str_replace(' ', '', $dessert->getNom());
+        
         // On récupère le panier en session
         $panier = $session->get("panier", []);
-
-        // Ajoutez la dessert au panier (similaire à ce que vous avez fait pour les pizzas)
-        $panier[$dessert->getId()] = [$dessert->getPrix(),"type" => "dessert"];
-
-
-
+        
+        // Vérifier si la dessert existe déjà dans le panier
+        if (isset($panier[$uniqueIdentifier])) {
+            // Mise à jour de la quantité de la dessert existante
+            $panier[$uniqueIdentifier]["quantity"] += $quantity;
+            // Mise à jour du prix total pour la dessert
+            $panier[$uniqueIdentifier]["totalPrice"] = $dessert->getPrix() * $panier[$uniqueIdentifier]["quantity"];
+        } else {
+            // Ajout de la dessert au panier
+            $panier[$uniqueIdentifier] = [
+                "quantity" => $quantity,
+                "type" => "dessert",
+                "totalPrice" => $dessert->getPrix() * $quantity // Calcul du prix total initial
+            ];
+        }
+        
         // Mettez à jour le panier en session
         $session->set("panier", $panier);
         
-            dd($panier);
+        
+        // Répondez par un message JSON pour indiquer le succès
+        return new JsonResponse(['success' => true]);
 
-        // Répondez par exemple avec un message JSON pour indiquer que la dessert a été ajoutée au panier
-        return $this->json(['message' => 'Dessert ajoutée au panier']);
     }
 
 

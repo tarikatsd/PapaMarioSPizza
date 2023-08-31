@@ -4,87 +4,154 @@ namespace App\Controller;
 
 use App\Entity\Pizza;
 use App\Form\ConfigPizzaType;
-use App\Repository\IngredientRepository;
 use App\Repository\PizzaRepository;
-use App\Repository\ReseauSocialRepository;
+use App\Repository\IngredientRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ReseauSocialRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class FrontPizzaController extends AbstractController
 {
     #[Route('/pizza/modif', name: 'app_front_pizza_modif')]
-    public function modifPizza(Request $request, PizzaRepository $pizzaRepository,
+    public function modifPizza(Request $request, PizzaRepository $pizzaRepository,ReseauSocialRepository $reseauSocialRepository,
     IngredientRepository $ingredientRepository, SessionInterface $session): Response
     {
-        $pizza = $pizzaRepository->find($request->request->get("pizzaId")); 
-        $ingredients = $request->request->get("ingredients");
-        // dump(gettype($ingredients));
-        $originalIngredients = $pizza->getIngredient();
-        // dump($ingredients);
-        // dd(count($originalIngredients));
-        // $gap = array_diff($ingredients, $originalIngredients->toArray());
-        // foreach ($ingredients as $ingredient) {
-        //     dump($ingredient);
-        //     // if(!in_array($ingredient, $originalIngredients->toArray())){
-        //     //     $gap[] = $ingredient;
-        //     // }
-        // }
-        // dump("=============================");
-        $original = [];
-        foreach ($originalIngredients->toArray() as $ingredient) {
-            // dump($ingredient);
-            array_push($original, $ingredient->getId());
-        }
-        $gap = array_diff($ingredients, $original);
-        // dd($gap);
-        $supplements = [];
-        $prixTotal = $pizza->getPrix();
-        // // on boucle sur le tableau gap, on recupère les ingrédients par leur id et leur nom et leur  prix 
-        foreach ($gap as $ingredientId) {   
-            $ingredient = $ingredientRepository->find($ingredientId);
-            $prixTotal += $ingredient->getPrix();
-        }
+// Récupération des données depuis la requête
+$pizzaId = $request->request->get("pizzaId");
+$ingredients = $request->request->get("ingredients");
+$quantity = $request->request->get("quantity");
 
-        // On met dans le panier en session
-        // On récupère le panier en session
-        $panier = $session->get("panier", []);
-        // On ajoute la pizza au panier
-        // $panier[$pizza->getId()] = [$prixTotal, $ingredients, $gap, "pizzas"];
-        $panier[$pizza->getId()]  = [
-            "pizza" => $pizza,
-            "prixTotal" => $prixTotal,
-            "ingredients" => $ingredients,
-            "gap" => $gap,
-        ];
+// Récupération de la pizza à partir du repository
+$pizza = $pizzaRepository->find($pizzaId);
+$originalIngredients = $pizza->getIngredient();
 
-        // On remet le panier en session
-        $session->set("panier", $panier);
-        //  dd($panier);
+$original = [];
+foreach ($originalIngredients->toArray() as $ingredient) {
+    // Construction d'un tableau avec les ID des ingrédients originaux
+    array_push($original, $ingredient->getId());
+}
 
+$ingredientsAdded = [];
+$ingredientsRemoved = [];
 
-
-        // foreach ($gap as $ingredientId) {
-        //     $ingredient = $ingredientRepository->find($ingredientId);
-        //     $supplement += $ingredient->getPrix();
-        // }
-        // dd($supplement);
-        // on additione le prix de la pizza et le prix des ingrédients
-        //$pizza->setPrix($pizza->getPrix() + $supplement);
-        // on la stocke dans une variable
-        // $prix = $pizza->getPrix();
-        // on ajoute les ingrédients à la pizza
-
-        // on persiste la pizza
-        //dd($prix);
-        // $entityManager->persist($pizza);
-
-        return new Response("coucou");
+// Comparaison entre les ingrédients originaux et les ingrédients sélectionnés
+foreach ($original as $ingredientId) {
+    if (!in_array($ingredientId, $ingredients)) {
+        // Si l'ingrédient n'est pas dans les ingrédients sélectionnés, il a été enlevé
+        $ingredientsRemoved[] = $ingredientId;
     }
+}
+
+foreach ($ingredients as $ingredientId) {
+    if (!in_array($ingredientId, $original)) {
+        // Si l'ingrédient n'était pas dans les ingrédients originaux, il a été ajouté
+        $ingredientsAdded[] = $ingredientId;
+    }
+}
+
+$totalPrice = $pizza->getPrix();
+
+foreach ($ingredientsAdded as $ingredientId) {   
+    // Calcul du prix total en ajoutant le prix des ingrédients ajoutés
+    $ingredient = $ingredientRepository->find($ingredientId);
+    $totalPrice += $ingredient->getPrix();
+}
+
+// Calcul du prix total de la pizza multiplié par la quantité
+$totalPrice *= $quantity;
+
+// Récupération du panier en session
+$panier = $session->get("panier", []);
+
+// Si la pizza existe déjà dans le panier
+if (isset($panier[$pizzaId])) {
+    // Mise à jour de la quantité et du prix total de la pizza existante dans le panier
+    $panier[$pizzaId]["quantity"] += $quantity;
+    $panier[$pizzaId]["totalPrice"] += $totalPrice;
+} else {
+    // Ajout de la pizza au panier comme une nouvelle entrée
+    $panier[$pizzaId] = [
+        "totalPrice" => $totalPrice,
+        "ingredientsAdded" => $ingredientsAdded,
+        "ingredientsRemoved" => $ingredientsRemoved,
+        "quantity" => $quantity,
+        "type" => "pizza"
+    ];
+}
+
+// Mise à jour du panier en session
+$session->set("panier", $panier);
+
+// Répondez par un message JSON pour indiquer le succès
+return new JsonResponse(['success' => true]);
+    }
+
+// // Récupération des données depuis la requête
+// $pizzaId = $request->request->get("pizzaId");
+// $ingredients = $request->request->get("ingredients");
+// $quantity = $request->request->get("quantity");
+
+// // Récupération de la pizza à partir du repository
+// $pizza = $pizzaRepository->find($pizzaId);
+// $originalIngredients = $pizza->getIngredient();
+
+// $original = [];
+// foreach ($originalIngredients->toArray() as $ingredient) {
+//     // Construction d'un tableau avec les ID des ingrédients originaux
+//     array_push($original, $ingredient->getId());
+// }
+
+// $ingredientsAdded = [];
+// $ingredientsRemoved = [];
+
+// // Comparaison entre les ingrédients originaux et les ingrédients sélectionnés
+// foreach ($original as $ingredientId) {
+//     if (!in_array($ingredientId, $ingredients)) {
+//         // Si l'ingrédient n'est pas dans les ingrédients sélectionnés, il a été enlevé
+//         $ingredientsRemoved[] = $ingredientId;
+//     }
+// }
+
+// foreach ($ingredients as $ingredientId) {
+//     if (!in_array($ingredientId, $original)) {
+//         // Si l'ingrédient n'était pas dans les ingrédients originaux, il a été ajouté
+//         $ingredientsAdded[] = $ingredientId;
+//     }
+// }
+
+// $prixTotal = $pizza->getPrix();
+
+// foreach ($ingredientsAdded as $ingredientId) {   
+//     // Calcul du prix total en ajoutant le prix des ingrédients ajoutés
+//     $ingredient = $ingredientRepository->find($ingredientId);
+//     $prixTotal += $ingredient->getPrix();
+// }
+
+// // Récupération du panier en session
+// $panier = $session->get("panier", []);
+
+// // Mise à jour du panier avec les informations de la pizza
+// $panier[$pizzaId]  = [
+//     "prixTotal" => $prixTotal,
+//     "ingredientsAdded" => $ingredientsAdded,
+//     "ingredientsRemoved" => $ingredientsRemoved,
+//     "quantity" => $quantity,
+//     "type" => "pizza"
+// ];
+
+// // Mise à jour du panier en session
+// $session->set("panier", $panier);
+// dd($panier);
+// // Répondez par un message JSON pour indiquer le succès
+// return new JsonResponse(['success' => true]);
+
+//     }
 
 
 

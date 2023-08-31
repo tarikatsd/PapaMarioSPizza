@@ -1,25 +1,184 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello FrontPanierController!{% endblock %}
+{% block title %}
+    Votre Panier
+{% endblock %}
 
 {% block body %}
-<h1>Votre panier</h1>
-{% if pizzas|length > 0 %}
-    {% for pizza in pizzas %}
-    <h2>{{ pizza[0].nom }}</h2>
-    <p>Prix : {{pizza[1]}}</p>
-    <p>Ingrédients :</p>
-        <ul>
-        {% for ingredient in pizza[2] %}
-            <li>{{ ingredient.nom }}</li>
-        {% endfor %}
-    </ul>
-    <p>Compléments :</p>
-        <ul>
-            {% for ingredient in pizza[3] %}
-                <li>{{ ingredient.nom }} {{ ingredient.prix }} </li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
-{% endif %}
+    <h1 class="text-center mt-4">
+        Votre panier
+    </h1>
+    <div class="mb-2">
+    <a href="{{ path('app_front_pizza') }}" class="btn btn-orange">
+    Continuer mes achats
+    </a>
+    </div>
+    
+    <table class="table table-index table-striped table-responsive">
+        <thead>
+            <tr>
+                <th>Produits</th>
+                <th>Suplements</th>
+                <th>Prix</th>
+                <th>Quantitées</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% if pizzas|length > 0 %}
+                {% for pizza in pizzas %}
+                    <tr>
+                        <td>
+                            {{ pizza['pizza'].nom }}
+                            </td>
+                            <td>
+                                {% for ingredient in pizza['ingredientsRemoved'] %}
+                                    {{"-"}}{{ingredient.nom }}{{","}}
+                                {% endfor %}
+                                {% for ingredient in pizza['ingredientsAdded'] %}
+                                {{"+"}}{{ ingredient.nom }}{{":"}}
+                                    {{ ingredient.prix }}{{","}}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {{ pizza['totalPrice'] }}
+                            </td>
+                            <td>
+                                <input type="number" class="quantity" value="{{ pizza['quantity'] }}" min="1" max="20" >
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        <tbody>
+            {% if canettes|length > 0 %}
+                {% for canette in canettes %}
+                    <tr>
+                        <td>
+                            {{ canette['canette'].nom }} : {{ canette['canette'].taille }}
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            {{ canette['totalPrice'] }}
+                        </td>
+                        <td>
+                            <input type="number" class="quantity" value="{{ canette['quantity'] }}" min="1" max="20" >
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+        <tbody>
+            {% if boissons|length > 0 %}
+                {% for boisson in boissons %}
+                    <tr>
+                        <td>
+                            {{ boisson['boisson'].nom }} : {{ boisson['boisson'].taille }}
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            {{ boisson['totalPrice'] }}
+                        </td>
+                        <td>
+                            <input type="number" class="quantity" value="{{ boisson['quantity'] }}" min="1" max="20" >
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+
+        </tbody>
+        <tbody>
+            {% if desserts|length > 0 %}
+                {% for dessert in desserts %}
+                    <tr>
+                        <td>
+                            {{ dessert['dessert'].nom }}
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            {{ dessert['totalPrice'] }}
+                        </td>
+                        <td>
+                            <input type="number" class="quantity" value="{{ dessert['quantity'] }}" min="1" max="20" >
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+        <tbody>
+            {% if extras|length > 0 %}
+                {% for extra in extras %}
+                    <tr>
+                        <td>
+                            {{ extra['extra'].nom }}
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            {{ extra['totalPrice'] }}
+                        </td>
+                        <td>
+                            <input type="number" class="quantity" value="{{ extra['quantity'] }}" min="1" max="20" >
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>        
+        <tfoot>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    Total
+                </td>
+                <td id="total">
+                </td>
+                <td>
+                    <a href="" class="btn btn-brown">
+                        Commander
+                    </a>
+                </td>
+        </tr>
+    </tfoot>
+</table>
+
+
+
+
+    {% endblock %}
+    {% block javascripts %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Attachez des écouteurs d'événements aux entrées de quantité
+            const quantityInputs = document.querySelectorAll('.quantity');
+            quantityInputs.forEach(input => {
+                input.addEventListener('input', updateTotal);
+            });
+            
+            // Appelez la fonction updateTotal initialement pour afficher le total initial
+            updateTotal();
+        });
+    
+        // Fonction pour mettre à jour le total
+        function updateTotal() {
+            let total = 0;
+    
+            // Parcourez les entrées de quantité et calculez le total mis à jour
+            quantityInputs.forEach(input => {
+                const row = input.closest('tr');
+                const priceCell = row.querySelector('td:nth-child(3)');
+                const price = parseFloat(priceCell.textContent);
+                const quantity = parseInt(input.value);
+    
+                total += price * quantity;
+            });
+    
+            // Mettez à jour la cellule du total avec le total calculé
+            const totalCell = document.getElementById('total');
+            totalCell.textContent = total.toFixed(2); // Formatez le total à 2 décimales
+        }
+    </script>
 {% endblock %}

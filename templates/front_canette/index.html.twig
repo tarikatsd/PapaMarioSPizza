@@ -3,6 +3,8 @@
 {% block title %}Nos Canettes{% endblock %}
 
 {% block body %}
+                <div id="success-message" ></div>
+
     <h1 class="text-center mt-4">
     <i class="fas fa-beer"></i>
     Nos Canettes</h1>
@@ -20,11 +22,12 @@
                         <div class="mt-auto d-flex justify-content-between">
                         <span class="badge badge-primary bg-brown" style="display: flex; justify-content: center; align-items: center;">
                         <p class="card-text m-0">
-                            {{ canette.prix }}
-                            <i class="fas fa-euro"></i>
-                        </p>
-                    </span>
-                    <button class="btn btn-warning btn-add-canette" data-canette-id="{{ canette.id }}">
+                        {{ canette.prix }}
+                    <i class="fas fa-euro"></i>
+                </p>
+            </span>
+            <input type="number" class="quantity" value="1" min="1" max="20" >
+                        <button class="btn btn-warning btn-add-canette" data-canette-id="{{ canette.id }}">
                             <a href="#" class="btn btn-warning"><i class="fas fa-shopping-cart"></i></a>
                         </button>
                         </div>
@@ -37,7 +40,13 @@
 {% endblock %}
 {% block javascripts %}
 <script>
+    let quantity = 0;
     $(".btn-add-canette").on("click", function(event){
+        quantity = $(this).siblings(".quantity").val();
+        if (quantity == 0)  {
+            quantity = 1;
+        }
+        
         event.preventDefault();
         event.stopPropagation();
         let canetteId = $(this).data("canette-id");
@@ -46,10 +55,15 @@
             type: "POST",
             data: {
                 canetteId: canetteId,
+                quantity: quantity,
                 },
                 }).done(function(response){
-
-                    });
+                        if (response.success) {
+                            $("#success-message").text("La canette a bien été ajoutée au panier").fadeIn().delay(2000).fadeOut();
+                        }else {
+                        $("#success-message").text("Une erreur est survenue").fadeIn().delay(2000).fadeOut();
+                    }
+        });
     });
 
 </script>
