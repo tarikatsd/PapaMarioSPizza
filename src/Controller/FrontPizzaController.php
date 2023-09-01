@@ -86,13 +86,14 @@ if (isset($panier[$uniqueKey])) {
         "ingredientsAdded" => $ingredientsAdded,
         "ingredientsRemoved" => $ingredientsRemoved,
         "quantity" => $quantity,
-        "type" => "pizza"
+        "type" => "pizza",
+        'uniqueKey' => $uniqueKey,
     ];
 }
 
 // Mise à jour du panier en session
 $session->set("panier", $panier);
-dd($panier);
+// dd($uniqueKey);
 // Répondez par un message JSON pour indiquer le succès
 return new JsonResponse(['success' => true]);
 

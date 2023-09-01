@@ -43,6 +43,12 @@ class FrontPanierController extends AbstractController
         $extras = [];
         $promos = [];
 
+
+        foreach ($pizzas as $key => $item) {
+            $uniqueKey = $item["uniqueKey"];
+            $pizza = $pizzaRepository->find($key);
+        }
+
         // dd($panier);
         foreach ($panier as $key => $item) {
             $lastKey = $item['type'];
@@ -51,6 +57,7 @@ class FrontPanierController extends AbstractController
             $pizza = $pizzaRepository->find($key);
             $ingredientsAdded = [];
             $ingredientsRemoved = [];
+            
     
             foreach ($item['ingredientsAdded'] as $ingredientId) {
                 $ingredientAdded = $ingredientRepository->find($ingredientId);
@@ -64,14 +71,15 @@ class FrontPanierController extends AbstractController
                     array_push($ingredientsRemoved, $ingredientRemoved);
                 }
             }
-    
+
             array_push($pizzas, [
                 'type' => 'pizza',
                 'pizza' => $pizza,
                 'totalPrice' => $item['totalPrice'],
                 'quantity' => $item['quantity'],
                 'ingredientsAdded' => $ingredientsAdded,
-                'ingredientsRemoved' => $ingredientsRemoved,
+                'ingredientsRemoved' => $ingredientsRemoved,  
+                'uniqueKey' => $item['uniqueKey'],
             ]);
             } elseif ($lastKey === "canette") {
                 $canette = $canetteRepository->find($key);
@@ -133,12 +141,15 @@ class FrontPanierController extends AbstractController
                 // Mettez à jour la session du panier en conséquence
                 $panier = $this->get('session')->get('panier', []);
                 
-                dd($itemId, $newQuantity);
+                // dd($itemId, $newQuantity);
                 if (isset($panier[$itemId])) {
                     $panier[$itemId]['quantity'] = $newQuantity;
                     // Mettez à jour d'autres données du panier si nécessaire
                 }
-        
+                // si la quantite est de 0, on supprime l'item du panier
+                if ($newQuantity == 0) {
+                    unset($panier[$itemId]);
+                }
                 $this->get('session')->set('panier', $panier);
                 // dd($panier);
                 // Répondez avec une réponse JSON pour indiquer le succès
