@@ -2,22 +2,24 @@
 
 namespace App\Controller;
 
-use App\Repository\BoissonRepository;
+use App\Repository\ExtraRepository;
 use App\Repository\PizzaRepository;
+use App\Repository\PromoRepository;
+use App\Repository\BoissonRepository;
 use App\Repository\CanetteRepository;
 use App\Repository\DessertRepository;
-use App\Repository\ExtraRepository;
 use App\Repository\IngredientRepository;
-use App\Repository\PromoRepository;
 use App\Repository\ReseauSocialRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Translation\Extractor\ExtractorInterface;
 
 class FrontPanierController extends AbstractController
 {
+
     #[Route('/panier', name: 'app_front_panier')]
     public function index(
         SessionInterface $sessionInterface,
@@ -40,7 +42,6 @@ class FrontPanierController extends AbstractController
         $boissons = [];
         $extras = [];
         $promos = [];
-        $prixTotal = 0;
 
         // dd($panier);
         foreach ($panier as $key => $item) {
@@ -77,28 +78,28 @@ class FrontPanierController extends AbstractController
                 array_push($canettes, [
                     'canette' => $canette,
                     'quantity' => $item['quantity'],
-                    'totalPrice' => $canette->getPrix() * $item['quantity'],
+                    'totalPrice' => $canette->getPrix(),
                 ]);
             } elseif ($lastKey === "dessert") {
                 $dessert = $dessertRepository->find($key);
                 array_push($desserts, [
                     'dessert' => $dessert,
                     'quantity' => $item['quantity'],
-                    'totalPrice' => $dessert->getPrix() * $item['quantity'],
+                    'totalPrice' => $dessert->getPrix(),
                 ]);
             } elseif ($lastKey === "boisson") {
                 $boisson = $boissonRepository->find($key);
                 array_push($boissons, [
                     'boisson' => $boisson,
                     'quantity' => $item['quantity'],
-                    'totalPrice' => $boisson->getPrix() * $item['quantity'],
+                    'totalPrice' => $boisson->getPrix(),
                 ]);
             } elseif ($lastKey === "extra") {
                 $extra = $extraRepository->find($key);
                 array_push($extras, [
                     'extra' => $extra,
                     'quantity' => $item['quantity'],
-                    'totalPrice' => $extra->getPrix() * $item['quantity'],
+                    'totalPrice' => $extra->getPrix(),
                 ]);
             } elseif ($lastKey === "promo") {
                 $promo = $promoRepository->find($key);
@@ -107,9 +108,10 @@ class FrontPanierController extends AbstractController
                     'quantity' => $item['quantity'],
                 ]);
             } 
-            $prixTotal = $pizza->getPrix() * $item['quantity'] += $prixTotal;
         }
-
+        
+        
+        
         return $this->render('front_panier/index.html.twig', [
             'reseauSocials' => $reseauSocialRepository->findAll(),
             'pizzas' => $pizzas,
@@ -118,8 +120,28 @@ class FrontPanierController extends AbstractController
             'boissons' => $boissons,
             'extras' => $extras,
             'promos' => $promos,
-            // 'total' => $sessionInterface->get('total'),
             'panier' => $panier,
         ]);
+
     }
+    #[Route('/update/panier', name: 'app_front_update_panier')]
+    public function updateCart(Request $request, SessionInterface $sessionInterface,): Response
+    {
+                // Récupérez les données de la requête
+                $itemId = $request->request->get("itemId");
+                $newQuantity = $request->request->get("newQuantity");
+                // Mettez à jour la session du panier en conséquence
+                $panier = $this->get('session')->get('panier', []);
+                
+                dd($itemId, $newQuantity);
+                if (isset($panier[$itemId])) {
+                    $panier[$itemId]['quantity'] = $newQuantity;
+                    // Mettez à jour d'autres données du panier si nécessaire
+                }
+        
+                $this->get('session')->set('panier', $panier);
+                // dd($panier);
+                // Répondez avec une réponse JSON pour indiquer le succès
+                return new JsonResponse(['success' => true]);
+            }
 }

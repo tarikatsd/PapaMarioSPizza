@@ -22,10 +22,15 @@ class FrontPizzaController extends AbstractController
     public function modifPizza(Request $request, PizzaRepository $pizzaRepository,ReseauSocialRepository $reseauSocialRepository,
     IngredientRepository $ingredientRepository, SessionInterface $session): Response
     {
+
+
 // Récupération des données depuis la requête
 $pizzaId = $request->request->get("pizzaId");
 $ingredients = $request->request->get("ingredients");
 $quantity = $request->request->get("quantity");
+
+// Créez une clé unique en combinant l'ID de la pizza avec les ingrédients sélectionnés (sous forme de chaîne) pour identifier la pizza dans le panier
+$uniqueKey = $pizzaId . '_' . implode('_', $ingredients);
 
 // Récupération de la pizza à partir du repository
 $pizza = $pizzaRepository->find($pizzaId);
@@ -63,20 +68,20 @@ foreach ($ingredientsAdded as $ingredientId) {
     $totalPrice += $ingredient->getPrix();
 }
 
-// Calcul du prix total de la pizza multiplié par la quantité
-$totalPrice *= $quantity;
-
 // Récupération du panier en session
 $panier = $session->get("panier", []);
 
 // Si la pizza existe déjà dans le panier
-if (isset($panier[$pizzaId])) {
+if (isset($panier[$uniqueKey])) {
     // Mise à jour de la quantité et du prix total de la pizza existante dans le panier
-    $panier[$pizzaId]["quantity"] += $quantity;
-    $panier[$pizzaId]["totalPrice"] += $totalPrice;
+    $panier[$uniqueKey]["quantity"] += $quantity;
+    $panier[$uniqueKey]["totalPrice"] += $totalPrice;
+    // Mise à jour des ingrédients si nécessaire
+    $panier[$uniqueKey]["ingredientsAdded"] = $ingredientsAdded;
+    $panier[$uniqueKey]["ingredientsRemoved"] = $ingredientsRemoved;
 } else {
-    // Ajout de la pizza au panier comme une nouvelle entrée
-    $panier[$pizzaId] = [
+    // Ajout de la pizza au panier comme une nouvelle entrée avec une clé unique
+    $panier[$uniqueKey] = [
         "totalPrice" => $totalPrice,
         "ingredientsAdded" => $ingredientsAdded,
         "ingredientsRemoved" => $ingredientsRemoved,
@@ -87,71 +92,11 @@ if (isset($panier[$pizzaId])) {
 
 // Mise à jour du panier en session
 $session->set("panier", $panier);
-
+dd($panier);
 // Répondez par un message JSON pour indiquer le succès
 return new JsonResponse(['success' => true]);
+
     }
-
-// // Récupération des données depuis la requête
-// $pizzaId = $request->request->get("pizzaId");
-// $ingredients = $request->request->get("ingredients");
-// $quantity = $request->request->get("quantity");
-
-// // Récupération de la pizza à partir du repository
-// $pizza = $pizzaRepository->find($pizzaId);
-// $originalIngredients = $pizza->getIngredient();
-
-// $original = [];
-// foreach ($originalIngredients->toArray() as $ingredient) {
-//     // Construction d'un tableau avec les ID des ingrédients originaux
-//     array_push($original, $ingredient->getId());
-// }
-
-// $ingredientsAdded = [];
-// $ingredientsRemoved = [];
-
-// // Comparaison entre les ingrédients originaux et les ingrédients sélectionnés
-// foreach ($original as $ingredientId) {
-//     if (!in_array($ingredientId, $ingredients)) {
-//         // Si l'ingrédient n'est pas dans les ingrédients sélectionnés, il a été enlevé
-//         $ingredientsRemoved[] = $ingredientId;
-//     }
-// }
-
-// foreach ($ingredients as $ingredientId) {
-//     if (!in_array($ingredientId, $original)) {
-//         // Si l'ingrédient n'était pas dans les ingrédients originaux, il a été ajouté
-//         $ingredientsAdded[] = $ingredientId;
-//     }
-// }
-
-// $prixTotal = $pizza->getPrix();
-
-// foreach ($ingredientsAdded as $ingredientId) {   
-//     // Calcul du prix total en ajoutant le prix des ingrédients ajoutés
-//     $ingredient = $ingredientRepository->find($ingredientId);
-//     $prixTotal += $ingredient->getPrix();
-// }
-
-// // Récupération du panier en session
-// $panier = $session->get("panier", []);
-
-// // Mise à jour du panier avec les informations de la pizza
-// $panier[$pizzaId]  = [
-//     "prixTotal" => $prixTotal,
-//     "ingredientsAdded" => $ingredientsAdded,
-//     "ingredientsRemoved" => $ingredientsRemoved,
-//     "quantity" => $quantity,
-//     "type" => "pizza"
-// ];
-
-// // Mise à jour du panier en session
-// $session->set("panier", $panier);
-// dd($panier);
-// // Répondez par un message JSON pour indiquer le succès
-// return new JsonResponse(['success' => true]);
-
-//     }
 
 
 

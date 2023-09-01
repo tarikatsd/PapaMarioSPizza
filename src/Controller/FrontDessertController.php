@@ -37,7 +37,7 @@ class FrontDessertController extends AbstractController
             $panier[$uniqueIdentifier] = [
                 "quantity" => $quantity,
                 "type" => "dessert",
-                "totalPrice" => $dessert->getPrix() * $quantity // Calcul du prix total initial
+                "totalPrice" => $dessert->getPrix()  // Calcul du prix total initial
             ];
         }
         

@@ -37,7 +37,7 @@ class FrontExtraController extends AbstractController
             $panier[$uniqueIdentifier] = [
                 "quantity" => $quantity,
                 "type" => "extra",
-                "totalPrice" => $extra->getPrix() * $quantity // Calcul du prix total initial
+                "totalPrice" => $extra->getPrix()
             ];
         }
         
