@@ -38,6 +38,7 @@ class FrontBoissonController extends AbstractController
             $panier[$uniqueIdentifier] = [
                 "quantity" => $quantity,
                 "type" => "boisson",
+                "nom" => $boisson->getNom(),
                 "totalPrice" => $boisson->getPrix() // Calcul du prix total initial
             ];
         }

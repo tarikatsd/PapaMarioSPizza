@@ -36,15 +36,16 @@ class FrontCanetteController extends AbstractController
             // Ajout de la canette au panier
             $panier[$uniqueIdentifier] = [
                 "quantity" => $quantity,
+                "totalPrice" => $canette->getPrix(), // Calcul du prix total initial
+                "nom" => $canette->getNom(),
                 "type" => "canette",
-                "totalPrice" => $canette->getPrix() // Calcul du prix total initial
             ];
         }
         
         // Mettez à jour le panier en session
         $session->set("panier", $panier);
         
-        dd($panier);
+        // dd($panier);
         // Répondez par un message JSON pour indiquer le succès
         return new JsonResponse(['success' => true]);
 

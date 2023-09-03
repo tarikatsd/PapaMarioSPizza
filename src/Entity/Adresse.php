@@ -37,6 +37,10 @@ class Adresse
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
+    public function __toString(): string
+    {
+        return $this->getNom() . ' ' . $this->getVoie() . ' ' . $this->getCodePostal() . ' ' . $this->getVille();
+    }
 
     public function getId(): ?int
     {
@@ -114,18 +118,6 @@ class Adresse
 
         return $this;
     }
-
-    // public function getUser(): ?User
-    // {
-    //     return $this->user;
-    // }
-
-    // public function setUser(?User $user): static
-    // {
-    //     $this->user = $user;
-
-    //     return $this;
-    // }
 
     public function getUser(): ?User
     {

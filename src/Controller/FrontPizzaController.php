@@ -88,6 +88,7 @@ if (isset($panier[$uniqueKey])) {
         "quantity" => $quantity,
         "type" => "pizza",
         'uniqueKey' => $uniqueKey,
+        "nom" => $pizza->getNom(),
     ];
 }
 

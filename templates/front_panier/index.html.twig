@@ -23,7 +23,7 @@
                 <th>Quantitées</th>
             </tr>
         </thead>
-
+        {% if panier|length > 0 %}   
         <tbody>
             {% if pizzas|length > 0 %}
                 {% for pizza in pizzas %}
@@ -130,26 +130,28 @@
         </tbody>        
         <tfoot>
             <tr>
-                <td>
-                </td>
-                <td>
+                <td class=" text-center fw-bold">
                     Total
                 </td>
-                <td id="total">
-                    {# {{ initialTotal }} #}
+                <td id="total" colspan="2" class=" text-center fw-bold">
+                    0.00
                 </td>
                 <td>
-                    <a href="" class="btn btn-brown">
+                    <a href={{ path('app_front_commande')}} class="btn btn-brown">
                         Commander
                     </a>
                 </td>
         </tr>
     </tfoot>
+    {% else %}
+    <tbody>
+        <tr>
+            <td colspan="4" class="text-start">
+                Votre panier est vide
+            </td>
+        </tr>
+    {% endif %}
 </table>
-
-
-
-
     {% endblock %}
     {% block javascripts %}
     <script>
