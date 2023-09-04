@@ -19,27 +19,27 @@ class Article
     #[ORM\Column]
     private ?int $quantity = null;
 
-    #[ORM\ManyToOne]
-    private ?Pizza $pizza = null;
-
-    #[ORM\ManyToOne]
-    private ?Promo $promo = null;
-
-    #[ORM\ManyToOne]
-    private ?Boisson $boisson = null;
-
-    #[ORM\ManyToOne]
-    private ?Canette $canette = null;
-
-    #[ORM\ManyToOne]
-    private ?Dessert $dessert = null;
-
-    #[ORM\ManyToOne]
-    private ?Extra $extra = null;
 
     #[ORM\ManyToOne(inversedBy: 'article')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Commande $commande = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $nom = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $ingredientAdd = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $ingredientRemoved = null;
+
+    public function __toString(): string
+    {
+        return $this->nom;
+        return $this->prix;
+        return $this->quantity;
+
+    }
 
     public function getId(): ?int
     {
@@ -69,79 +69,7 @@ class Article
 
         return $this;
     }
-
-    public function getPizza(): ?Pizza
-    {
-        return $this->pizza;
-    }
-
-    public function setPizza(?Pizza $pizza): static
-    {
-        $this->pizza = $pizza;
-
-        return $this;
-    }
-
-    public function getPromo(): ?Promo
-    {
-        return $this->promo;
-    }
-
-    public function setPromo(?Promo $promo): static
-    {
-        $this->promo = $promo;
-
-        return $this;
-    }
-
-    public function getBoisson(): ?Boisson
-    {
-        return $this->boisson;
-    }
-
-    public function setBoisson(?Boisson $boisson): static
-    {
-        $this->boisson = $boisson;
-
-        return $this;
-    }
-
-    public function getCanette(): ?Canette
-    {
-        return $this->canette;
-    }
-
-    public function setCanette(?Canette $canette): static
-    {
-        $this->canette = $canette;
-
-        return $this;
-    }
-
-    public function getDessert(): ?Dessert
-    {
-        return $this->dessert;
-    }
-
-    public function setDessert(?Dessert $dessert): static
-    {
-        $this->dessert = $dessert;
-
-        return $this;
-    }
-
-    public function getExtra(): ?Extra
-    {
-        return $this->extra;
-    }
-
-    public function setExtra(?Extra $extra): static
-    {
-        $this->extra = $extra;
-
-        return $this;
-    }
-
+    
     public function getCommande(): ?Commande
     {
         return $this->commande;
@@ -150,6 +78,42 @@ class Article
     public function setCommande(?Commande $commande): static
     {
         $this->commande = $commande;
+
+        return $this;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): static
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getIngredientAdd(): ?string
+    {
+        return $this->ingredientAdd;
+    }
+
+    public function setIngredientAdd(?string $ingredientAdd): static
+    {
+        $this->ingredientAdd = $ingredientAdd;
+
+        return $this;
+    }
+
+    public function getIngredientRemoved(): ?string
+    {
+        return $this->ingredientRemoved;
+    }
+
+    public function setIngredientRemoved(?string $ingredientRemoved): static
+    {
+        $this->ingredientRemoved = $ingredientRemoved;
 
         return $this;
     }

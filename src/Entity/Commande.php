@@ -28,7 +28,7 @@ class Commande
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: Article::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: Article::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $article;
 
     #[ORM\Column]

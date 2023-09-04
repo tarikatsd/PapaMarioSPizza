@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Form\UserType;
+use App\Repository\ArticleRepository;
+use App\Repository\CommandeRepository;
 use App\Repository\ReseauSocialRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +18,8 @@ class FrontUserController extends AbstractController
 {
     #[Route('/user', name: 'app_front_user')]
     public function index(Request $request,ReseauSocialRepository $reseauSocialRepository,
-    EntityManagerInterface $entityManagerInterface,UserPasswordHasherInterface $userPasswordHasherInterface): Response
+    EntityManagerInterface $entityManagerInterface,UserPasswordHasherInterface $userPasswordHasherInterface,
+    CommandeRepository $commandeRepository, UserRepository $userRepository,ArticleRepository $articleRepository): Response
     {
        // on recupere l'utilisateur connecté
         $user = $this->getUser();
@@ -43,15 +47,27 @@ class FrontUserController extends AbstractController
                 $entityManagerInterface->persist($user);
             }
             $entityManagerInterface->flush();
-
-
             $this->addFlash('success', 'Votre profil a bien été modifié');
+
+
+            if (!$user) {
+            throw $this->createNotFoundException('Utilisateur non trouvé');
+            }
+
+            $commandes = $userRepository->getCommandes();
+            $articles = $commandeRepository->getArticles();
+
+
             return $this->redirectToRoute('app_front_user');
         }
 
         return $this->render('front_user/index.html.twig', [
             'form' => $form->createView(),
             'reseauSocials' => $reseauSocialRepository->findAll(),
+            'commandes' => $commandeRepository->findBy(['user' => $user]),
+            'articles' => $articleRepository->findBy(['commande' => $commandeRepository->findBy(['user' => $user])]),
+            'user' => $user,
+
         ]);
     }
 }

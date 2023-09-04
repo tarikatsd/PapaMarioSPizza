@@ -48,7 +48,7 @@ class FrontPanierController extends AbstractController
             $uniqueKey = $item["uniqueKey"];
             $pizza = $pizzaRepository->find($key);
         }
-
+        
         // dd($panier);
         foreach ($panier as $key => $item) {
             $lastKey = $item['type'];
@@ -118,7 +118,7 @@ class FrontPanierController extends AbstractController
             } 
         }
         
-        
+
         
         return $this->render('front_panier/index.html.twig', [
             'reseauSocials' => $reseauSocialRepository->findAll(),
