@@ -8,9 +8,12 @@
     <h1 class="text-center mt-4">
         Votre panier
     </h1>
-    <div class="mb-2">
+    <div class="d-flex justify-content-between">
     <a href="{{ path('app_front_pizza') }}" class="btn btn-orange">
     Continuer mes achats
+    </a>
+    <a href="{{ path('app_front_clear_panier') }}" class="btn btn-red">
+    Vider le panier
     </a>
     </div>
     
@@ -146,7 +149,7 @@
     {% else %}
     <tbody>
         <tr>
-            <td colspan="4" class="text-start">
+            <td colspan="4" class="text-center fw-bold fs-4">
                 Votre panier est vide
             </td>
         </tr>

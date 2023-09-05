@@ -37,35 +37,42 @@ class FrontCommandeController extends AbstractController
         }
         $commande = new Commande();
         $commande->setUser($this->getUser());
-        $commande->setReference(uniqid().'-'.date('d-m-Y').'-'.date('H:i:s').'-'.rand(0, 9999));
+        $commande->setReference(uniqid() . '-' . date('d-m-Y') . '-' . date('H:i:s') . '-' . rand(0, 9999));
         $commande->setStatut('En cours');
         $commande->setUpdatedAt(new \DateTimeImmutable());
+        $total = 0;
 
         foreach ($panier as $item => $id) {
             $article = new Article();
             $nom = $id['nom'];
             $quantity = $id['quantity'];
             $prix = $id['totalPrice'];
-            $total = $prix * $quantity;
-
             // Bouclez sur les ingrédients ajoutés pour obtenir leurs noms et graisses
-            $ingredientsAddedInfo = [];
-            foreach ($id['ingredientsAdded'] as $ingredientId) {
-                $ingredient = $ingredientRepository->find($ingredientId);
-                if ($ingredient) {
-                    $ingredientsAddedInfo[] = $ingredient->getNom() . ' (' . $ingredient->getPrix() . '€)';
+            if (empty($id['ingredientsAdded'])) {
+                $ingredientsAdded = '';
+            } else {
+                $ingredientsAddedInfo = [];
+                foreach ($id['ingredientsAdded'] as $ingredientId) {
+                    $ingredient = $ingredientRepository->find($ingredientId);
+                    if ($ingredient) {
+                        $ingredientsAddedInfo[] = $ingredient->getNom() . ' (' . $ingredient->getPrix() . '€)';
+                    }
+                    $ingredientsAdded = implode(', ', $ingredientsAddedInfo);
                 }
             }
-            // Concaténez les noms et prix des ingrédients ajoutés en une chaîne
-            $ingredientsAdded = implode(', ', $ingredientsAddedInfo);
-            foreach ($id['ingredientsRemoved'] as $ingredientId) {
-                $ingredient = $ingredientRepository->find($ingredientId);
-                if ($ingredient) {
-                    $ingredientsRemovedNames[] = $ingredient->getNom();
+            if (empty($id['ingredientsRemoved'])) {
+                $ingredientsRemoved = '';
+            } else {
+                $ingredientsRemovedNames = [];
+                foreach ($id['ingredientsRemoved'] as $ingredientId) {
+                    $ingredient = $ingredientRepository->find($ingredientId);
+                    if ($ingredient) {
+                        $ingredientsRemovedNames[] = $ingredient->getNom();
+                    }
+                    $ingredientsRemoved = implode(', ', $ingredientsRemovedNames);
                 }
-            // Convertissez le tableau de noms en une chaîne de caractères
-        }
-        $ingredientsRemoved = implode(', ', $ingredientsRemovedNames);
+            }
+
             // Attribuez les informations à l'article
             $article->setNom($nom);
             $article->setIngredientAdd($ingredientsAdded);
@@ -73,8 +80,10 @@ class FrontCommandeController extends AbstractController
             $article->setQuantity($quantity);
             $article->setPrix($prix);
             $commande->addArticle($article);
-            $commande->setTotal($total);
+            $articleTotal = $prix * $quantity;
+            $total += $articleTotal;
         }
+        $commande->setTotal($total);
 
         if ($commande->getTotal() < 15) {
             $this->addFlash('danger', 'Votre commande doit être supérieure à 15€');

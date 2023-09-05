@@ -155,4 +155,11 @@ class FrontPanierController extends AbstractController
                 // Répondez avec une réponse JSON pour indiquer le succès
                 return new JsonResponse(['success' => true]);
             }
+            // route pour vider le panier
+            #[Route('/clear/panier', name: 'app_front_clear_panier')]
+            public function clearCart(SessionInterface $sessionInterface): Response
+            {
+                $sessionInterface->clear();
+                return $this->redirectToRoute('app_front_panier');
+            }
 }

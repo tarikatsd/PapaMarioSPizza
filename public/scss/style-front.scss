@@ -15,23 +15,18 @@ body {
             margin-bottom: 0;
             font-family: 'Fredericka the Great', sans-serif;
         }
-
         .navbar-nav {
             .nav-item {
                 .nav-link {
                     color: #e78c01;
-
                     &:hover {
                         color: #9c5e00;
                     }
                 }
-
                 .dropdown-menu {
                     background-color: #582900;
-
                     .dropdown-item {
                         color: #e78c01;
-
                         &:hover {
                             background-color: #e78c01;
                             color: #582900;
@@ -46,7 +41,6 @@ body {
         .modal-content {
             .modal-header {
                 background-color: #582900;
-
                 .modal-title,
                 .btn-close {
                     color: #e78c01;
@@ -116,5 +110,24 @@ body {
         padding: 20px;
         text-align: center;
     }
+    .custom-tab-color {
+        background-color: #582900;
+        color: #e78c01; 
+    }
+    
+    .custom-tab-color.active {
+        background-color: #e78c01;
+    }
+    .card-img-top{
+    // une image carré
+    height: 200px;
+    }
+    .card{
+        border: 1px solid #582900;
+        border-radius: 5px;
+        box-shadow: 0px 2px 4px rgba(147, 61, 0, 0.3);
+        width: auto;
+    }
 }
+
 
