@@ -23,6 +23,14 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+        ->add('adresse',CollectionType::class, [
+            'entry_type' => AdresseType::class,
+            'entry_options' => ['label' => false],
+            'allow_add' => true,
+            'by_reference' => false,
+            'allow_delete' => true,
+            'label' => false,
+        ])
         ->remove('roles')
         ->remove('password')
         ->remove('isVerified')
@@ -72,14 +80,6 @@ class UserType extends AbstractType
             'attr' => [
                 'placeholder' => 'Téléphone'
             ]
-        ])
-        ->add('adresse',CollectionType::class, [
-            'entry_type' => AdresseType::class,
-            'entry_options' => ['label' => false],
-            'allow_add' => true,
-            'by_reference' => false,
-            'allow_delete' => true,
-            'label' => false,
         ])
         ->add('modifier', SubmitType::class, [
             'attr' => [

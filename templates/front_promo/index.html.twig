@@ -6,11 +6,11 @@
 
 {% block body %}
 <div id="success-message" ></div>
-    <h1 class="text-center mt-4 ">
+<h1 class="text-center mt-4 pt-4 mb-4 pb-4 border-bottom border-warning">
         <i class="fas fa-tags me-1"></i>
         Nos promos
     </h1>
-    <div class="container mt-4">
+    <div class="container my-5 ">
     <div class="row">
         {% for promo in promos %}
             <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-4">
@@ -22,15 +22,14 @@
                                 {{ promo.nom }}
                             </h5>
                             <p class="card-text">
-                                {{ promo.prix }}
-                                €
+                                {{ promo.prix }}€
                             </p>
                         </div>
                         <p class="card-text">
                             {{ promo.description }}
                         </p>
                         <div class="mt-auto d-flex justify-content-between">
-                            <button type="button" class="btn btn-warning btn-modal-promo" data-promo-id="{{ promo.id }}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <input type="number" class="quantity" value="1" min="1" max="20" style="width: 40px; border-radius: 5px">                        <button type="button" class="btn btn-warning btn-modal-promo" data-promo-id="{{ promo.id }}" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 <i class="fas fa-shopping-cart"></i>
                             </button>
                         </div>
@@ -60,7 +59,6 @@
                         </span>
                     </div>
                 </div>
-            {# {% include 'front_promo/_form.html.twig' %} #}
             </div>
         </div>
     </div>
@@ -70,48 +68,81 @@
 {% endblock %}
 {% block javascripts %}
 <script>
-    
-    $(".btn-modal-promo").on("click", function(event){
-        event.preventDefault();
-        event.stopPropagation();
-        let promoId = $(this).data("promo-id");
-        
-        //alert("ok");
-        $.ajax({
-            url : "/promo/getform",
-            type: "POST",
-            data: {
-                promoId: promoId
-            }, 
-        }).done(function(response){
-            $("#exampleModal .modal-body").html(response);
-            $('.select2').each(function(){
-                let max = $(this).attr("max");
-                $(this).select2({
-                    placeholder: 'Choisir un produit',
-                    allowClear: true,
-                    dropdownParent: $('#exampleModal'),
-                    maximumSelectionLength: max,
-                    minimumSelectionLength: max,
-                    language: {
-                        maximumSelected: function(e) {
-                            return "Vous ne pouvez pas sélectionner plus de " + e.maximum + " produits";
-                        },
-                        minimumSelected: function(e) {
-                            return "Vous devez sélectionner au moins " + e.minimum + " produits";
-                        },
-                    }
-                    
-                });
-            });
-            $('.select2').val(null).trigger('change');
-        });
-    });
-    $('.btn-close-modal-promo').on('click', function(event){
-        event.preventDefault();
-        event.stopPropagation();
-        $("#exampleModal .modal-body").html('<div class="text-center"><div class="spinner-border text-warning" role="status"><span class="visually-hidden">Loading...</span></div></div>');
-    });
-</script>
+// Écouteur pour le clic sur le bouton modal
+$(".btn-modal-promo").on("click", function(event){
+    event.preventDefault();
+    event.stopPropagation();
+    let promoId = $(this).data("promo-id");
 
+    // Stocker l'ID dans un attribut de la modal
+    $("#exampleModal .modal-body").attr("data-promo-id", promoId);
+
+    $.ajax({
+        url: "/promo/getform",
+        type: "POST",
+        data: {
+            promoId: promoId
+        },
+    }).done(function(response){
+        $("#exampleModal .modal-body").html(response);
+        $('.select2').each(function(){
+            let max = $(this).attr("max");
+            $(this).select2({
+                placeholder: 'Choisir un produit',
+                allowClear: true,
+                dropdownParent: $('#exampleModal'),
+                maximumSelectionLength: max,
+                minimumSelectionLength: max,
+                language: {
+                    maximumSelected: function(e) {
+                        return "Vous ne pouvez pas sélectionner plus de " + e.maximum + " produits";
+                    },
+                    minimumSelected: function(e) {
+                        return "Vous devez sélectionner au moins " + e.minimum + " produits";
+                    },
+                }
+            });
+        });
+        $('.select2').val(null).trigger('change');
+    });
+});
+
+// Écouteur pour le clic sur le bouton "Valider" à l'intérieur de la modal
+$("#exampleModal").on("click", "#btn-valid-promo", function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Récupérer l'ID à partir de l'attribut de la modal
+    let promoId = $("#exampleModal .modal-body").attr("data-promo-id");
+    // Récupérer la composition sélectionnée 
+    let composition = $("#exampleModal .select2").val();
+
+    // Récupérer la quantité sélectionnée
+    let quantity = 0;
+    $(".btn-modal-promo").on("click", function(event){
+        quantity = $(this).siblings(".quantity").val();
+        if (quantity == 0)  {
+            quantity = 1;
+        }
+    console.log(quantity);
+
+    });
+    // Faire une requête AJAX pour ajouter la promo au panier
+    $.ajax({
+        url: "/promo/panier",
+        type: "POST",
+        data: {
+            promoId: promoId,
+            quantity: quantity,
+            composition: composition,
+        },
+    }).done(function(response){
+        if (response.success) {
+            $("#success-message").text("La promo a bien été ajoutée au panier").fadeIn().delay(2000).fadeOut();
+        }
+    });
+    
+});
+
+</script>
 {% endblock %}

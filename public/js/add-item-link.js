@@ -7,7 +7,6 @@ const addAdresseFormDeleteLink = (item) => {
 
   removeFormButton.addEventListener('click', (e) => {
       e.preventDefault();
-      // remove the li for the tag form
       item.remove();
   });
 }
@@ -16,7 +15,6 @@ const addFormToCollection = (e) => {
   const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
   const item = document.createElement('li');
-  // const item = document.createElement('div');
 
   item.innerHTML = collectionHolder
     .dataset

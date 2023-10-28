@@ -42,7 +42,8 @@ class FrontPanierController extends AbstractController
         $boissons = [];
         $extras = [];
         $promos = [];
-
+        
+    
 
         foreach ($pizzas as $key => $item) {
             $uniqueKey = $item["uniqueKey"];
@@ -135,27 +136,18 @@ class FrontPanierController extends AbstractController
     #[Route('/update/panier', name: 'app_front_update_panier')]
     public function updateCart(Request $request, SessionInterface $sessionInterface,): Response
     {
-                // Récupérez les données de la requête
                 $itemId = $request->request->get("itemId");
                 $newQuantity = $request->request->get("newQuantity");
-                // Mettez à jour la session du panier en conséquence
                 $panier = $this->get('session')->get('panier', []);
-                
-                // dd($itemId, $newQuantity);
                 if (isset($panier[$itemId])) {
                     $panier[$itemId]['quantity'] = $newQuantity;
-                    // Mettez à jour d'autres données du panier si nécessaire
                 }
-                // si la quantite est de 0, on supprime l'item du panier
                 if ($newQuantity == 0) {
                     unset($panier[$itemId]);
                 }
                 $this->get('session')->set('panier', $panier);
-                // dd($panier);
-                // Répondez avec une réponse JSON pour indiquer le succès
                 return new JsonResponse(['success' => true]);
             }
-            // route pour vider le panier
             #[Route('/clear/panier', name: 'app_front_clear_panier')]
             public function clearCart(SessionInterface $sessionInterface): Response
             {

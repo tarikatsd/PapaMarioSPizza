@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block body %}
+    <h1 class="text-center mt-4 pt-4 mb-4 pb-4 border-bottom border-warning">
+    <i class="fas fa-envelope-open-text"></i>
+    Contact</h1>
+    <div class="container my-5">
+        <div class="row">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+        </div>
+{% endblock %}

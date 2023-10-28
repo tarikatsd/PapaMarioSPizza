@@ -19,42 +19,26 @@ class FrontDessertController extends AbstractController
         $dessertId = $request->request->get("dessertId");
         $quantity = $request->request->get("quantity");
         $dessert = $dessertRepository->find($dessertId);
-        
-        // Créer un identifiant unique en combinant l'ID et le nom de la dessert
+
         $uniqueIdentifier = $dessert->getId() . '_' . str_replace(' ', '', $dessert->getNom());
         
-        // On récupère le panier en session
         $panier = $session->get("panier", []);
         
-        // Vérifier si la dessert existe déjà dans le panier
         if (isset($panier[$uniqueIdentifier])) {
-            // Mise à jour de la quantité de la dessert existante
             $panier[$uniqueIdentifier]["quantity"] += $quantity;
-            // Mise à jour du prix total pour la dessert
-            $panier[$uniqueIdentifier]["totalPrice"] = $dessert->getPrix() * $panier[$uniqueIdentifier]["quantity"];
+            $panier[$uniqueIdentifier]["totalPrice"] = $dessert->getPrix();
         } else {
-            // Ajout de la dessert au panier
             $panier[$uniqueIdentifier] = [
                 "quantity" => $quantity,
                 "type" => "dessert",
                 "nom" => $dessert->getNom(),
-                "totalPrice" => $dessert->getPrix()  // Calcul du prix total initial
+                "totalPrice" => $dessert->getPrix()
             ];
         }
-        
-        // Mettez à jour le panier en session
+        // dd($panier);
         $session->set("panier", $panier);
-        
-        
-        // Répondez par un message JSON pour indiquer le succès
         return new JsonResponse(['success' => true]);
-
     }
-
-
-
-
-
 
     #[Route('/dessert', name: 'app_front_dessert')]
     public function index(DessertRepository $dessertRepository,ReseauSocialRepository $reseauSocialRepository): Response

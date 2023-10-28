@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class="text-center mt-4">
+<div class="container mt-4 py-4 mb-5">
+<h1 class="text-center mt-4 pt-4 mb-4 pb-4 border-bottom border-warning">
         Votre panier
     </h1>
     <div class="d-flex justify-content-between">
@@ -16,7 +17,6 @@
     Vider le panier
     </a>
     </div>
-    
     <table class="table table-index table-striped table-responsive">
         <thead>
             <tr>
@@ -155,87 +155,62 @@
         </tr>
     {% endif %}
 </table>
+</div>
     {% endblock %}
     {% block javascripts %}
     <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Appelez la fonction updateTotal initialement pour afficher le total initial
     updateTotal();
 });
-
-    // Fonction pour mettre à jour le total
     function updateTotal() {
         let total = 0;
-    
-        // Parcourez les entrées de quantité et calculez le total mis à jour
         const quantityInputs = document.querySelectorAll('.quantity');
         quantityInputs.forEach(input => {
             const price = parseFloat(input.getAttribute('data-price'));
             let quantity = parseInt(input.value);
-    
-            // Vérifiez si la quantité est égale à zéro
             if (quantity == 0) {
                 quantity = 1;
-                // Affichez une boîte de dialogue de confirmation
                 const confirmDelete = confirm("Voulez-vous supprimer cet article du panier ?");
                 if (confirmDelete) {
-                    // Supprimez l'élément du panier
                     input.parentElement.parentElement.remove();
                 }
             }
-    
-            // Mettez à jour le champ de quantité avec la nouvelle quantité (peut être 0)
             input.value = quantity;
-    
-            // Mettez à jour le prix total de l'article en fonction de la quantité
             const totalCell = input.parentElement.parentElement.querySelector('.total-price');
             totalCell.textContent = (price * quantity).toFixed(2);
-    
-            // Ajoutez le prix de cet article au total général
             total += price * quantity;
         });
-    
-        // Mettez à jour la cellule du total avec le total calculé
         const totalCell = document.getElementById('total');
         totalCell.textContent = total.toFixed(2);
     }
-    
-    // Attachez des écouteurs d'événements aux entrées de quantité
     const quantityInputs = document.querySelectorAll('.quantity');
     quantityInputs.forEach(input => {
         input.addEventListener('input', updateTotal);
         const itemId = input.getAttribute('data-item-id');
     });
-    // Fonction pour envoyer une requête AJAX pour mettre à jour la session du panier
     function updateCart(itemId, newQuantity) {
         event.preventDefault();
         event.stopPropagation();
-        // Utilisez jQuery pour envoyer la requête AJAX
         $.ajax({
-            type: 'POST', // Méthode HTTP POST
-            url: '/update/panier', // L'URL de votre route Symfony pour la mise à jour du panier
+            type: 'POST',
+            url: '/update/panier',
             data: {
                 itemId: itemId,
                 newQuantity: newQuantity
-            }, // Les données à envoyer au serveur
-            dataType: 'json', // Le type de données attendu en réponse
+            },
+            dataType: 'json', 
             success: function(data) {
                 if (data.success) {
-                    // La mise à jour du panier a réussi, faites ce que vous devez faire
                     console.log('Mise à jour du panier réussie !');
                 } else {
-                    // La mise à jour du panier a échoué, gérer les erreurs si nécessaire
                     console.error('Échec de la mise à jour du panier.');
                 }
             },
             error: function(xhr, textStatus, errorThrown) {
-                // Gérer les erreurs de la requête AJAX
                 console.error('Erreur lors de la requête AJAX : ' + textStatus, errorThrown);
             }
         });
     }
-    
-    // Attachez des écouteurs d'événements aux entrées de quantité pour déclencher la mise à jour du panier
     quantityInputs.forEach(input => {
         input.addEventListener('change', function() {
             const itemId = input.getAttribute('data-item-id');
@@ -243,6 +218,5 @@ document.addEventListener("DOMContentLoaded", function() {
             updateCart(itemId, newQuantity);
         });
     });
-    
 </script>
 {% endblock %}

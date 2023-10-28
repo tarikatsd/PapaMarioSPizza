@@ -1,20 +1,36 @@
 <footer class="footer bg-brown color-yellow p-3 d-flex justify-content-between">
     <div>
-        &copy;{{ "" | date('Y') }}
+        &copy;
+        {{ "" | date('Y') }}
     </div>
-    
     <div>
-        <a href="#" class=" color-yellow">Accueil</a>
-        <a href="#" class="mx-1 color-yellow">Contact</a>
-        <a href="#" class=" color-yellow">À propos</a>
+        <i class="fas fa-phone"></i>
+        06 00 00 00 00
+    <div>
     </div>
-    
+        <a href="https://www.bing.com/maps?q=1+all%C3%A9e+du+ch%C3%A2teau+villemomble&FORM=HDRSC6&cp=48.882519%7E2.525599&lvl=16.7" class="mx-1 color-yellow">
+            <i class="fas fa-map-marker-alt"></i>
+            1 rue du chateau 93250 villemomble
+        </a>
+    </div>
+    <div>
+        <a href="{{ path('app_front_contact') }}" class="mx-1 color-yellow">
+            <i class="fas fa-mail-bulk"></i>
+            Contact
+        </a>
+    <div>
+    </div>
+        <a href="#" class="mx-1 color-yellow">
+            <i class="fas fa-question-circle"></i>
+            Conditions générales de vente
+        </a>
+    </div>
     <div>
         Suivez-nous sur :
         {% for reseauSocial in reseauSocials -%}
-        <a href="{{ reseauSocial.url }}" class="mx-& color-yellow text-decoration-none">
-            <img src="{{ asset('images/reseauSocial/' ~ reseauSocial.imageName) }}" alt="{{ reseauSocial.nom }}" width="30" height="30">
-        </a>
-        {%- endfor %}
-    </div>
-</footer>
+            <a href="{{ reseauSocial.url }}" class="mx-& color-yellow text-decoration-none">
+                <img src="{{ asset('images/reseauSocial/' ~ reseauSocial.imageName) }}" alt="{{ reseauSocial.nom }}" width="30" height="30"></a>
+            {%- endfor %}
+        </div>
+    </footer>
+    

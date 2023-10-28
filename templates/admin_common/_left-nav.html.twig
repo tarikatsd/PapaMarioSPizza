@@ -75,14 +75,6 @@
     <li class="sidebar-header">
         Paramètres du site
     </li>
-    <li class="sidebar-item {{carouselActive}}">
-                <a class="sidebar-link" href={{path("app_admin_carousel_index")}}>
-                    <i class="align-middle" data-feather="image"></i>
-                    <span class="align-middle">
-                        Carousels
-                    </span>
-                </a>
-            </li>
 </li>
 <li class="sidebar-item {{homeActive}}">
 <a class="sidebar-link" href={{path("app_admin_home_index")}}>
@@ -112,7 +104,7 @@
 </a>
 </li>
 <li class="sidebar-item {{contactActive}}">
-<a class="sidebar-link" href="#">
+<a class="sidebar-link" href="{{ path('app_admin_contact_index') }}">
     <i class="align-middle" data-feather="mail"></i>
     <span class="align-middle">
         Contact

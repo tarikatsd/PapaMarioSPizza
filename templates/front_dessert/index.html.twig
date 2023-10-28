@@ -1,38 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nos Dessert{% endblock %}
+{% block title %}
+    Nos Dessert
+{% endblock %}
 
 {% block body %}
-<div id="success-message" ></div>
-    <h1 class="text-center mt-4">
-    <i class="fas fa-ice-cream me-1"></i>
-    Nos Desserts</h1>
-    <div class="container mt-4">
+    <div id="success-message"></div>
+    <h1 class="text-center mt-4 pt-4 mb-4 pb-4 border-bottom border-warning">
+        <i class="fas fa-ice-cream me-1"></i>
+        Nos Desserts
+    </h1>
+    <div class="container my-5">
         <div class="row">
             {% for dessert in desserts %}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="card h-100">
-                    <img src="{{ asset('images/dessert/' ~ dessert.imageName) }}" class="card-img-top" alt="{{ dessert.nom }}">
-                    <div class="card-body d-flex flex-column">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="card-title">{{ dessert.nom }}</h5>
-                        <p class="card-text">{{ dessert.prix }} €</p>
-                    </div>
-                        <div class="mt-auto d-flex justify-content-between">
-                        <input type="number" class="quantity" value="1" min="1" max="20" >
-                        <button class="btn btn-warning btn-add-dessert" data-dessert-id="{{ dessert.id }}">
-                        <i class="fas fa-shopping-cart"></i>
-                        </button>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card h-100">
+                        <img src="{{ asset('images/dessert/' ~ dessert.imageName) }}" class="card-img-top" alt="{{ dessert.nom }}">
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="card-title">
+                                        {{ dessert.nom }}
+                                    </h5>
+                                    <p class="card-text">
+                                        {{ dessert.prix }}€
+                                    </p>
+                                </div>
+                                <div class="mt-auto d-flex justify-content-between">
+                                <input type="number" class="quantity" value="1" min="1" max="20" style="width: 40px; border-radius: 5px">                                        <button class="btn btn-warning btn-add-dessert" data-dessert-id="{{ dessert.id }}">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
-            {% endfor %}
-        </div>
-    </div>
-{% endblock %}
-{% block javascripts %}
-<script>
+        {% endblock %}
+        {% block javascripts %}
+            <script>
     let quantity = 0;
     $(".btn-add-dessert").on("click", function(event){
         quantity = $(this).siblings(".quantity").val();
@@ -51,10 +57,11 @@
                 },
                 }).done(function(response){
                     if (response.success) {
-                        $("#success-message").text("Le dessert a bien été ajoutée au panier").fadeIn().delay(2000).fadeOut();
+                        $("#success-message").text("Le dessert a bien été ajoutée au panier")
+                        .fadeIn().delay(2000).fadeOut();
                     }
-            });
+        });
     });
-
 </script>
-                {% endblock %}
+        {% endblock %}
+        

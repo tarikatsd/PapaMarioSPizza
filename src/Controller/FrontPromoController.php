@@ -10,7 +10,9 @@ use App\Repository\ReseauSocialRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class FrontPromoController extends AbstractController
@@ -41,7 +43,7 @@ class FrontPromoController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
+    
     #[Route('/promo', name: 'app_front_promo')]
     public function index(
         PromoRepository $promoRepository,
@@ -52,7 +54,6 @@ class FrontPromoController extends AbstractController
     ): Response {
         $promo = new Promo();
         $form = $this->createForm(ConfigPromoType::class, $promo);
-        // On traite les données du formulaire lorsqu'il est soumis
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -67,4 +68,25 @@ class FrontPromoController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+    
+    
+    // #[Route('/promo/panier', name: 'app_front_promo_panier')]
+    // public function addpromo(Request $request, promoRepository $promoRepository, SessionInterface $session): Response
+    // {
+                
+    //             // $session->set("panier", []);
+    //             $panier = $session->get("panier", []);
+    //             $quantity = $request->request->get("quantity");
+    //             $promoId = $request->request->get("promoId");
+    //             $promo = $promoRepository->find($promoId);
+    //             $composition = $request->request->get("composition");
+    //             dd($composition , $quantity, $promoId);
+                
+    //             $uniqueIdentifier = $promoId . '_' . implode('_', $composition);
+
+        
+    //             $session->set("panier", $panier);
+    //             return new JsonResponse(['success' => true]);
+    //         }
+     
 }

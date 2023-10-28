@@ -7,11 +7,11 @@
 
 {% block body %}
 <div id="success-message" ></div>
-    <h1 class="text-center py-4">
+<h1 class="text-center mt-4 pt-4 mb-4 pb-4 border-bottom border-warning">
         <i class="fas fa-pizza-slice me-1"></i>
         Nos Pizzas
     </h1>
-    <div class="container mt-4">
+    <div class="container my-5">
         <div class="row">
             {% for pizza in pizzas %}
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -23,8 +23,7 @@
                                         {{ pizza.nom }}
                                     </h5>
                                     <p class="card-text">
-                                        {{ pizza.prix }}
-                                        €
+                                        {{ pizza.prix }}€
                                     </p>
                                 </div>
                                 {% for ingredient in pizza.ingredient %}
@@ -59,7 +58,6 @@
                     <span class="visually-hidden">Loading...</span>
                     </div>
                     </div>
-                    {# {% include 'front_pizza/_form.html.twig' %} #}
                     </div>
                     </div>
                 </div>
@@ -89,7 +87,7 @@
             },
         }).done(function(response){
             $("#exampleModal .modal-body").html(response);
-            $("#bt-valid-pizza").on("click", function(event){
+            $("#btn-valid-pizza").on("click", function(event){
                 event.preventDefault();
                 event.stopPropagation();
                 console.log($("#config_pizza_ingredient").val());
@@ -107,9 +105,7 @@
                     if (response.success) {
                         $("#success-message").text("La pizza a bien été ajoutée au panier").fadeIn().delay(2000).fadeOut();
                     }
-                    //alert('ok');
                 })
-                //alert('ok');
             })
             $('.select2').select2({
                 dropdownParent: $('#exampleModal'),

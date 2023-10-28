@@ -55,10 +55,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->adresse = new ArrayCollection();
         $this->commandes = new ArrayCollection();
     }
-
+    // magic function pour afficher le nom et prenom de l'utilisateur en chaine de caractère
     public function __toString(): string
     {
-        return $this->getPrenom() . ' ' . $this->getNom();
+        return $this->getEmail();
     }
 
     public function getId(): ?int

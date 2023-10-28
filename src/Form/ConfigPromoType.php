@@ -43,7 +43,6 @@ class ConfigPromoType extends AbstractType
             $builder
             ->add('canette',EntityType::class,["class"=>Canette::class,"multiple"=>true,'required'=>false,"attr"=>["class"=>"select2",
             "max"=> (!is_null($options['max_canette']) ? $options['max_canette'] : "")]])  
-    
             ;   
         }
     }

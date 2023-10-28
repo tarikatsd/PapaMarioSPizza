@@ -10,22 +10,24 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 class ExtraFixtures extends Fixture
 {
 public const NUGGETS_REFERENCE = 'nuggets';
+public const CHICKEN_WINGS_REFERENCE = 'chicken-wings';
+public const ONION_RINGS_REFERENCE = 'onion-rings';
 public const FRITES_REFERENCE = 'frites';
-public const SALADE_REFERENCE = 'salade';
-public const WINGS_REFERENCE = 'wings';
-public const SAUCE_REFERENCE = 'sauce';
-public const OIGNON_RINGS_REFERENCE = 'oignon-rings';
-public const PEPADREW_REFERENCE = 'pepadrew';
-public const CHEDDAR_REFERENCE = 'cheddar';
-public const CHEDDAR_FONDU_REFERENCE = 'cheddar-fondu';
+public const POTATOES_REFERENCE = 'potatoes';
+public const MOZZA_STICKS_REFERENCE = 'mozza-sticks';
+public const CHEESE_POPPERS_REFERENCE = 'cheese-poppers';
+public const TENDERS_REFERENCE = 'tenders';
+public const YAKITORI_REFERENCE = 'yakitori';
+public const BOUCHEES_AU_CAMEMBERT_REFERENCE = 'bouchees-au-camembert';
+public const PAIN_A_L_AIL_REFERENCE = 'pain-a-l-ail';
 
 
     public function load(ObjectManager $manager): void
     {
         $extra = new Extra();
-        $extra->setNom('nuggets');
-        $extra->setPrix(2.5);
-        $extra->setImageName('defaultExtra.jpg');
+        $extra->setNom('nuggets x 6');
+        $extra->setPrix('4.90');
+        $extra->setImageName('nuggets.jpg');
         $extra->setUpdatedAt(new DateTimeImmutable() );
         $extra->setSlug('nuggets');
         $extra->setIsActive(true);
@@ -33,9 +35,29 @@ public const CHEDDAR_FONDU_REFERENCE = 'cheddar-fondu';
         $this->addReference(self::NUGGETS_REFERENCE, $extra);
 
         $extra = new Extra();
-        $extra->setNom('frites');
-        $extra->setPrix(2.5);
-        $extra->setImageName('defaultExtra.jpg');
+        $extra->setNom('chicken wings x 6');
+        $extra->setPrix('5.90');
+        $extra->setImageName('chicken-wings.jpg');
+        $extra->setUpdatedAt(new DateTimeImmutable() );
+        $extra->setSlug('chicken-wings');
+        $extra->setIsActive(true);
+        $manager->persist($extra);
+        $this->addReference(self::CHICKEN_WINGS_REFERENCE, $extra);
+
+        $extra = new Extra();
+        $extra->setNom('Onion rings x 6');
+        $extra->setPrix('4.90');
+        $extra->setImageName('onion-rings.jpg');
+        $extra->setUpdatedAt(new DateTimeImmutable() );
+        $extra->setSlug('onion-rings');
+        $extra->setIsActive(true);
+        $manager->persist($extra);
+        $this->addReference(self::ONION_RINGS_REFERENCE, $extra);
+
+        $extra = new Extra();
+        $extra->setNom('Frites');
+        $extra->setPrix('2.90');
+        $extra->setImageName('frites.jpg');
         $extra->setUpdatedAt(new DateTimeImmutable() );
         $extra->setSlug('frites');
         $extra->setIsActive(true);
@@ -43,78 +65,74 @@ public const CHEDDAR_FONDU_REFERENCE = 'cheddar-fondu';
         $this->addReference(self::FRITES_REFERENCE, $extra);
 
         $extra = new Extra();
-        $extra->setNom('salade');
-        $extra->setPrix(2.5);
-        $extra->setImageName('defaultExtra.jpg');
+        $extra->setNom('Potatoes');
+        $extra->setPrix('2.90');
+        $extra->setImageName('potatoes.jpg');
         $extra->setUpdatedAt(new DateTimeImmutable() );
-        $extra->setSlug('salade');
+        $extra->setSlug('potatoes');
         $extra->setIsActive(true);
         $manager->persist($extra);
-        $this->addReference(self::SALADE_REFERENCE, $extra);
+        $this->addReference(self::POTATOES_REFERENCE, $extra);
 
         $extra = new Extra();
-        $extra->setNom('wings');
-        $extra->setPrix(2.5);
-        $extra->setImageName('defaultExtra.jpg');
+        $extra->setNom('Mozza sticks x 6');
+        $extra->setPrix('4.90');
+        $extra->setImageName('mozza-sticks.jpg');
         $extra->setUpdatedAt(new DateTimeImmutable() );
-        $extra->setSlug('wings');
+        $extra->setSlug('mozza-sticks');
         $extra->setIsActive(true);
         $manager->persist($extra);
-        $this->addReference(self::WINGS_REFERENCE, $extra);
-        
-        $extra = new Extra();
-        $extra->setNom('sauce');
-        $extra->setPrix(0.5);
-        $extra->setImageName('defaultExtra.jpg');
-        $extra->setUpdatedAt(new DateTimeImmutable() );
-        $extra->setSlug('sauce');
-        $extra->setIsActive(true);
-        $manager->persist($extra);
-        $this->addReference(self::SAUCE_REFERENCE, $extra);
+        $this->addReference(self::MOZZA_STICKS_REFERENCE, $extra);
 
         $extra = new Extra();
-        $extra->setNom('oigon rings');
-        $extra->setPrix(2.5);
-        $extra->setImageName('defaultExtra.jpg');
-        $extra->setUpdatedAt(new DateTimeImmutable() ); 
-        $extra->setSlug('oigon-rings');
+        $extra->setNom('Cheese poppers x 6');
+        $extra->setPrix('4.90');
+        $extra->setImageName('cheese-poppers.jpg');
+        $extra->setUpdatedAt(new DateTimeImmutable() );
+        $extra->setSlug('cheese-poppers');
         $extra->setIsActive(true);
         $manager->persist($extra);
-        $this->addReference(self::OIGNON_RINGS_REFERENCE, $extra);
+        $this->addReference(self::CHEESE_POPPERS_REFERENCE, $extra);
 
         $extra = new Extra();
-        $extra->setNom('pepadew');
-        $extra->setPrix(2.5);
-        $extra->setImageName('defaultExtra.jpg');
+        $extra->setNom('Tenders x 6');
+        $extra->setPrix('4.90');
+        $extra->setImageName('tenders.jpg');
         $extra->setUpdatedAt(new DateTimeImmutable() );
-        $extra->setSlug('pepadew');
+        $extra->setSlug('tenders');
         $extra->setIsActive(true);
         $manager->persist($extra);
-        $this->addReference(self::PEPADREW_REFERENCE, $extra);
+        $this->addReference(self::TENDERS_REFERENCE, $extra);
 
         $extra = new Extra();
-        $extra->setNom('cheddar');
-        $extra->setPrix(2.5);
-        $extra->setImageName('defaultExtra.jpg');
+        $extra->setNom('Yakitori x 6');
+        $extra->setPrix('4.90');
+        $extra->setImageName('yakitori.jpg');
         $extra->setUpdatedAt(new DateTimeImmutable() );
-        $extra->setSlug('cheddar');
+        $extra->setSlug('yakitori');
         $extra->setIsActive(true);
         $manager->persist($extra);
-        $this->addReference(self::CHEDDAR_REFERENCE, $extra);
+        $this->addReference(self::YAKITORI_REFERENCE, $extra);
 
         $extra = new Extra();
-        $extra->setNom('cheddar fondu');
-        $extra->setPrix(2.5);
-        $extra->setImageName('defaultExtra.jpg');
+        $extra->setNom('Bouchees au camembert x 6');
+        $extra->setPrix('4.90');
+        $extra->setImageName('bouchees-au-camembert.jpg');
         $extra->setUpdatedAt(new DateTimeImmutable() );
-        $extra->setSlug('cheddar-fondu');
+        $extra->setSlug('bouchees-au-camembert');
         $extra->setIsActive(true);
         $manager->persist($extra);
-        $this->addReference(self::CHEDDAR_FONDU_REFERENCE, $extra);
-        
+        $this->addReference(self::BOUCHEES_AU_CAMEMBERT_REFERENCE, $extra);
 
-
-
+        $extra = new Extra();
+        $extra->setNom('Pain a l\'ail');
+        $extra->setPrix('2.90');
+        $extra->setImageName('pain-a-l-ail.jpg');
+        $extra->setUpdatedAt(new DateTimeImmutable() );
+        $extra->setSlug('pain-a-l-ail');
+        $extra->setIsActive(true);
+        $manager->persist($extra);
+        $this->addReference(self::PAIN_A_L_AIL_REFERENCE, $extra);
 
         $manager->flush();
     }

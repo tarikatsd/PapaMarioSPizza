@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Form\UserType;
+use App\Repository\AdresseRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\CommandeRepository;
 use App\Repository\ReseauSocialRepository;
@@ -16,28 +17,22 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class FrontUserController extends AbstractController
 {
+
     #[Route('/user', name: 'app_front_user')]
     public function index(Request $request,ReseauSocialRepository $reseauSocialRepository,
     EntityManagerInterface $entityManagerInterface,UserPasswordHasherInterface $userPasswordHasherInterface,
-    CommandeRepository $commandeRepository, UserRepository $userRepository,ArticleRepository $articleRepository): Response
+    CommandeRepository $commandeRepository, UserRepository $userRepository,ArticleRepository $articleRepository,
+    AdresseRepository $adresseRepository): Response
     {
-       // on recupere l'utilisateur connecté
+        // on recupere l'utilisateur connecté
         $user = $this->getUser();
-       // on va cree un formulaire de User avec les data de l'utilisateur connecté et on passe le formulaire à la vue
+        $commandes = $commandeRepository->findBy(['user' => $user]);
+        $adresse = $adresseRepository->findBy(['user' => $user]);
+        $articles = $articleRepository->findBy(['commande' => $commandeRepository->findBy(['user' => $user])]);
+        if ($user) {
         $form = $this->createForm(UserType::class, $user);
-       // on hydrate le formulaire avec les données de l'utilisateur 
         $form->handleRequest($request);
-       // on va verifier si le formulaire est soumis et valide
         if($form->isSubmitted() && $form->isValid()){
-           // dd($user);
-           // dd($form->getData()); // Récupérer l'instance du User mais pas les propriétés mapped false
-           // dd($form->all()); // Récupérer toutes les données (champs) du formulaire y compris les mapped false
-           //dd($form->get('plainPassword')->getData()); // On récupére la données d'un champ en particulier y compris les mapped false
-           //dd($request->request->get('plainPassword')); // On récupère la valeur d'un champ non pas dans le formulaire, mais dans la requête.
-           // dd($form->getData()); // Récupérer l'instance du User mais pas les propriétés mapped false
-           // dd($form->all()); // Récupérer toutes les données (champs) du formulaire y compris les mapped false
-           //dd($form->get('plainPassword')->getData()); // On récupére la données d'un champ en particulier y compris les mapped false
-           //dd($request->request->get('plainPassword')); // On récupère la valeur d'un champ non pas dans le formulaire, mais dans la requête. $request->request récupère les données de la requête POST pour la requête GET il faut utiliser $request->query
             if(!is_null($request->request->get('plainPassword'))){
                 $user->setPassword(
                     $userPasswordHasherInterface->hashPassword(
@@ -48,24 +43,19 @@ class FrontUserController extends AbstractController
             }
             $entityManagerInterface->flush();
             $this->addFlash('success', 'Votre profil a bien été modifié');
-
-
-            if (!$user) {
-            throw $this->createNotFoundException('Utilisateur non trouvé');
-            }
-
-            $commandes = $userRepository->getCommandes();
-            $articles = $commandeRepository->getArticles();
-
-
             return $this->redirectToRoute('app_front_user');
+        }
+        }else{
+            return $this->redirectToRoute('app_login');
+            $this->addFlash('danger', 'Vous devez être connecté pour accéder à cette page');
         }
 
         return $this->render('front_user/index.html.twig', [
             'form' => $form->createView(),
             'reseauSocials' => $reseauSocialRepository->findAll(),
-            'commandes' => $commandeRepository->findBy(['user' => $user]),
-            'articles' => $articleRepository->findBy(['commande' => $commandeRepository->findBy(['user' => $user])]),
+            'commandes' => $commandes,
+            'adresse' => $adresse,
+            'articles' => $articles,
             'user' => $user,
 
         ]);

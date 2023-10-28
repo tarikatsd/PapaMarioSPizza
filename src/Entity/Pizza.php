@@ -71,8 +71,6 @@ class Pizza
     public function addIngredient(Ingredient $ingredient): static
     {
         if (!$this->ingredient->contains($ingredient)) {
-            
-
             $this->ingredient->add($ingredient);
         }
 

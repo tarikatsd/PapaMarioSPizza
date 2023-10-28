@@ -3,12 +3,12 @@
 {% block title %}Nos Canettes{% endblock %}
 
 {% block body %}
-                <div id="success-message" ></div>
+<div id="success-message" ></div>
 
-    <h1 class="text-center mt-4">
+    <h1 class="text-center mt-4 pt-4 mb-4 pb-4 border-bottom border-warning">
     <i class="fas fa-beer"></i>
     Nos Canettes</h1>
-    <div class="container mt-4">
+    <div class="container my-5">
         <div class="row">
             {% for canette in canettes %}
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -22,12 +22,10 @@
                         <div class="mt-auto d-flex justify-content-between">
                         <span class="badge badge-primary bg-brown" style="display: flex; justify-content: center; align-items: center;">
                         <p class="card-text m-0">
-                        {{ canette.prix }}
-                    <i class="fas fa-euro"></i>
+                        {{ canette.prix }}€
                 </p>
             </span>
-            <input type="number" class="quantity" value="1" min="1" max="20" >
-                        <button class="btn btn-warning btn-add-canette" data-canette-id="{{ canette.id }}">
+            <input type="number" class="quantity" value="1" min="1" max="20" style="width: 40px; border-radius: 5px">                        <button class="btn btn-warning btn-add-canette" data-canette-id="{{ canette.id }}">
                             <a href="#" class="btn btn-warning"><i class="fas fa-shopping-cart"></i></a>
                         </button>
                         </div>
